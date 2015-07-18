@@ -111,6 +111,8 @@ public class Main {
 	}
 
 	public static void main(String[] args) {		
+		// This runs 10 games. 250k thinking iterations. The exploration UCT constant is 4. Ignore the rest.
+		// They are for testing the bounds propagation feature which is not part of the issue at this point.
 		run(10, 250000, 4.0, false, 0, 0);
 	}
 }
