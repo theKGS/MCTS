@@ -204,13 +204,6 @@ public class ConnectFour implements Board {
 	}
 	
 	@Override
-	public int[] getOpponents() {
-		int [] opponents = new int[1];
-		opponents[0] = ( currentPlayer == 1 ) ? 0 : 1;
-		return opponents;
-	}
-
-	@Override
 	public double[] pessimisticBounds() {
 		double[] pessimistic = new double[2];
 		
