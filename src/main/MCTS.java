@@ -20,6 +20,12 @@ public class MCTS {
 		random = new Random();
 	}
 
+	/**
+	 * Run a UCT-MCTS simulation for a number of iterations. 
+	 * @param s
+	 * @param runs
+	 * @return
+	 */
 	public Move runMCTS(Board s, int runs) {
 		rootNode = new Node(s);
 		
@@ -38,23 +44,21 @@ public class MCTS {
 		return pickBest(rootNode);
 	}
 
-	private int countNodes(Node root) {
-		int sum = 0;
-		if (root.children.size() > 0) {
-			for (Node s : root.children) {
-				sum += countNodes(s);
-			}
-			return sum;
-		} else {
-			return 1;
-		}
-	}
-
+	/**
+	 * This represents the select stage, or default policy, of the algorithm.
+	 * Traverse down to the bottom of the tree using the selection strategy
+	 * until you find an unexpanded child node. Expand it. Run a random playout
+	 * Backpropagate results of the playout.
+	 * @param node Node from which to start selection
+	 */
 	private void select(Node node) {
 		// Break procedure if end of tree
 		if (node.board.gameOver()) {
 			node.backPropagateScore(node.board.getScore());
 			if (scoreBounds) {
+				// This runs only if bounds propagation is enabled.
+				// It propagates bounds from solved nodes and prunes
+				// branches from the when needed.
 				node.backPropagateBounds(node.board.optimisticBounds(), node.board.pessimisticBounds());
 			}
 			return;
@@ -67,7 +71,6 @@ public class MCTS {
 		if (!node.unvisitedChildren.isEmpty()) {
 			// it picks a move at random from list of unvisited children
 			Node temp = node.unvisitedChildren.remove(random.nextInt(node.unvisitedChildren.size()));
-			//Node temp = node.unvisitedChildren.remove(0);
 
 			node.children.add(temp);
 			playout(temp);
@@ -78,7 +81,8 @@ public class MCTS {
 			ArrayList<Node> bestNodes = new ArrayList<Node>();
 			
 			for (Node s : node.children) {
-				// Skip a node if its branch has been pruned
+				// Pruned is only ever true if a branch has been pruned from the tree
+				// and that can only happen if bounds propagation mode is enabled.
 				if (s.pruned == false){
 					tempBest = s.upperConfidenceBound(explorationConstant) 
 							+ optimisticBias * s.opti[node.player]
@@ -106,17 +110,21 @@ public class MCTS {
 		}
 	}
 
+	/**
+	 * This is the final step of the algorithm, to pick the best move
+	 * to actually make.
+	 * @param n this is the node whose children are considered
+	 * @return the best Move the algorithm can find
+	 */
 	private Move pickBest(Node n) {
 		double bestValue = Double.NEGATIVE_INFINITY;
 		Node bestChild = null;
 		double tempBest;
 
-		//System.out.println("Curr. player: " + n.player);
 		for (Node s : n.children) {
 			tempBest = s.score[n.player] / (double) s.games;
-			tempBest = Math.min(tempBest, s.opti[n.player]);
-			tempBest = Math.max(tempBest, s.pess[n.player]);
-			//System.out.println("Move: " + s.move.toString() + ", Score: " + tempBest);
+			//tempBest = Math.min(tempBest, s.opti[n.player]);
+			//tempBest = Math.max(tempBest, s.pess[n.player]);
 			if (tempBest >= bestValue) {
 				bestChild = s;
 				bestValue = tempBest;
@@ -201,19 +209,13 @@ public class MCTS {
 		double ratio = 0;
 		Move bestMove = null;
 
-		// System.out.println("AVAILABLE MOVES:");
 		for (FlatGameState st : states) {
-			// System.out.println("Rating: " + (double)st.wins /
-			// (double)st.games + ", Wins: " + st.wins + ", Games: " + st.games
-			// + ", Move: " + st.move.toString());
 			if (ratio <= (double) st.wins / (double) st.games) {
 				ratio = (double) st.wins / (double) st.games;
 				bestMove = st.move;
 			}
 		}
 
-		// System.out.println("Chose move: " + bestMove.toString() +
-		// ", With ratio: " + ratio);
 		return bestMove;
 	}
 
