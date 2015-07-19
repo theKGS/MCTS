@@ -1,0 +1,27 @@
+Iterations: 10000 Exp. Con.: 1.414, Bounds = false
+pessBias: 0.0 optiBias: 0.0
+Score for this run: 40 / 58
+Iterations: 25000 Exp. Con.: 1.414, Bounds = false
+pessBias: 0.0 optiBias: 0.0
+Score for this run: 24 / 69
+Iterations: 50000 Exp. Con.: 1.414, Bounds = false
+pessBias: 0.0 optiBias: 0.0
+Score for this run: 8 / 87
+Iterations: 75000 Exp. Con.: 1.414, Bounds = false
+pessBias: 0.0 optiBias: 0.0
+Score for this run: 22 / 75
+Iterations: 100000 Exp. Con.: 1.414, Bounds = false
+pessBias: 0.0 optiBias: 0.0
+Score for this run: 24 / 72
+Iterations: 150000 Exp. Con.: 1.414, Bounds = false
+pessBias: 0.0 optiBias: 0.0
+Score for this run: 57 / 42
+Iterations: 200000 Exp. Con.: 1.414, Bounds = false
+pessBias: 0.0 optiBias: 0.0
+Score for this run: 91 / 9
+Iterations: 250000 Exp. Con.: 1.414, Bounds = false
+pessBias: 0.0 optiBias: 0.0
+Score for this run: 99 / 1
+Iterations: 300000 Exp. Con.: 1.414, Bounds = false
+pessBias: 0.0 optiBias: 0.0
+Score for this run: 100 / 0
