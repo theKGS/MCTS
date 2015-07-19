@@ -5,14 +5,11 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
-import java.util.Random;
 
 import main.MCTS;
 import main.Move;
-import main.Node;
 
 public class Main {
 	static int scorePlayer0 = 0;
@@ -92,7 +89,7 @@ public class Main {
 		System.out.println("Score for this run: " + scorePlayer0 + " / " + scorePlayer1);
 
 		try {
-		    FileOutputStream fos = new FileOutputStream("long.txt", true);
+		    FileOutputStream fos = new FileOutputStream("overnight.txt", true);
 			Writer writer = new BufferedWriter(new OutputStreamWriter(fos, "UTF-8"));
 			
 		    writer.write("Iterations: " + it + " Exp. Con.: " + exp + ", Bounds = " + bounds + "\n");
@@ -113,6 +110,14 @@ public class Main {
 	public static void main(String[] args) {		
 		// This runs 10 games. 250k thinking iterations. The exploration UCT constant is 4. Ignore the rest.
 		// They are for testing the bounds propagation feature which is not part of the issue at this point.
-		run(10, 250000, 4.0, false, 0, 0);
+		run(100, 10000, 1.414, false, 0, 0);
+		run(100, 25000, 1.414, false, 0, 0);
+		run(100, 50000, 1.414, false, 0, 0);
+		run(100, 75000, 1.414, false, 0, 0);
+		run(100, 100000, 1.414, false, 0, 0);
+		run(100, 150000, 1.414, false, 0, 0);
+		run(100, 200000, 1.414, false, 0, 0);
+		run(100, 250000, 1.414, false, 0, 0);
+		run(100, 300000, 1.414, false, 0, 0);
 	}
 }
