@@ -5,7 +5,6 @@ import java.util.ArrayList;
 public class Node {
 	public double[] score;
 	public int games;
-	public Board board;
 	public Move move;
 	public ArrayList<Node> unvisitedChildren;
 	public ArrayList<Node> children;
@@ -23,12 +22,11 @@ public class Node {
 	 */
 	public Node(Board b) {
 		children = new ArrayList<Node>();
-		board = b;
 		player = b.getCurrentPlayer();
-		score = new double[board.getQuantityOfPlayers()];
-		pess = new double[board.getQuantityOfPlayers()];
-		opti = new double[board.getQuantityOfPlayers()];
-		for (int i = 0; i < board.getQuantityOfPlayers(); i++)
+		score = new double[b.getQuantityOfPlayers()];
+		pess = new double[b.getQuantityOfPlayers()];
+		opti = new double[b.getQuantityOfPlayers()];
+		for (int i = 0; i < b.getQuantityOfPlayers(); i++)
 			opti[i] = 1;
 	}
 
@@ -43,22 +41,20 @@ public class Node {
 		children = new ArrayList<Node>();
 		parent = prnt;
 		depth = parent.depth + 1;
-		board = b;
 		move = m;
-		board.makeMove(m);
-		player = board.getCurrentPlayer();
-		score = new double[board.getQuantityOfPlayers()];
-		pess = new double[board.getQuantityOfPlayers()];
-		opti = new double[board.getQuantityOfPlayers()];
-		for (int i = 0; i < board.getQuantityOfPlayers(); i++)
+		player = b.getCurrentPlayer();
+		score = new double[b.getQuantityOfPlayers()];
+		pess = new double[b.getQuantityOfPlayers()];
+		opti = new double[b.getQuantityOfPlayers()];
+		for (int i = 0; i < b.getQuantityOfPlayers(); i++)
 			opti[i] = 1;
 	}
 
-	public void initializeUnexplored() {
-		ArrayList<Move> legalMoves = board.getMoves();
+	public void initializeUnexplored(Board b) {
+		ArrayList<Move> legalMoves = b.getMoves();
 		unvisitedChildren = new ArrayList<Node>();
 		for (int i = 0; i < legalMoves.size(); i++) {
-			Node tempState = new Node(board.duplicate(), legalMoves.get(i),
+			Node tempState = new Node(b, legalMoves.get(i),
 					this);
 			unvisitedChildren.add(tempState);
 		}
