@@ -9,7 +9,7 @@ import main.Move;
 public class ConnectFour implements Board {
 
 	private boolean[][][] brd;
-	private int currentPlayer = 1;
+	private int currentPlayer = 0;
 	private int freeSlots[];
 	private int totalFreeSlots = 6 * 7;
 	private int winner = -1;
@@ -22,16 +22,7 @@ public class ConnectFour implements Board {
 			freeSlots[i] = 6;
 		winner = -1;
 	}
-	
-	public ConnectFour(int startingPlayer){
-		currentPlayer = startingPlayer;
-		brd = new boolean[7][6][2];
-		freeSlots = new int[7];
-		for (int i = 0; i < 7; i++)
-			freeSlots[i] = 6;
-		winner = -1;
-	}
-	
+		
 	@Override
 	public ArrayList<Board> duplicate(int n) {
 		ArrayList<Board> boardList = new ArrayList<Board>();

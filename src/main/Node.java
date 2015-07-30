@@ -42,22 +42,14 @@ public class Node {
 		parent = prnt;
 		depth = parent.depth + 1;
 		move = m;
-		player = b.getCurrentPlayer();
+		Board tempBoard = b.duplicate();
+		tempBoard.makeMove(m);
+		player = tempBoard.getCurrentPlayer();
 		score = new double[b.getQuantityOfPlayers()];
 		pess = new double[b.getQuantityOfPlayers()];
 		opti = new double[b.getQuantityOfPlayers()];
 		for (int i = 0; i < b.getQuantityOfPlayers(); i++)
 			opti[i] = 1;
-	}
-
-	public void initializeUnexplored(Board b) {
-		ArrayList<Move> legalMoves = b.getMoves();
-		unvisitedChildren = new ArrayList<Node>();
-		for (int i = 0; i < legalMoves.size(); i++) {
-			Node tempState = new Node(b, legalMoves.get(i),
-					this);
-			unvisitedChildren.add(tempState);
-		}
 	}
 
 	/**
@@ -151,22 +143,6 @@ public class Node {
 		for (Node s : children) {
 			if (pess[player] >= s.opti[player]) {
 				s.pruned = true;
-
-				/*
-				 * System.out.println("A branch was pruned from the tree!");
-				 * System.out.println("Player in parent: " + player);
-				 * System.out.println("Player in child: " + s.player);
-				 * System.out.println("Depth of parent: " + depth);
-				 * System.out.println("O/P for parent:");
-				 * System.out.println(opti[0] + " " + opti[1]);
-				 * System.out.println(pess[0] + " " + pess[1]);
-				 * System.out.println("Children:"); for (Node c : children) { if
-				 * (s == c) System.out.println("This one was pruned: ");
-				 * System.out.println(c.opti[0] + " " + c.opti[1]);
-				 * System.out.println(c.pess[0] + " " + c.pess[1]); }
-				 * System.out.println("Parent:"); board.print();
-				 * System.out.println("Child:"); s.board.print();
-				 */
 			}
 		}
 

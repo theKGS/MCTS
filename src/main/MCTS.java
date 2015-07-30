@@ -1,6 +1,7 @@
 package main;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 
 public class MCTS {
@@ -14,6 +15,8 @@ public class MCTS {
 	private boolean trackTime; // display thinking time used
 	private int timeLimit; // Set a time limit per move.
 
+	private ArrayList<Node> path;
+	
 	public MCTS() {
 		random = new Random();
 	}
@@ -40,7 +43,7 @@ public class MCTS {
 			System.out.println("Thinking time per move in milliseconds: "
 					+ (endTime - startTime) / 1000000);
 
-		return pickBest(rootNode);
+		return finalSelect(rootNode);
 	}
 
 	/**
@@ -55,11 +58,13 @@ public class MCTS {
 	private void select(Board brd, Node node) {
 		Node currentNode = node;
 		Board currentBoard = brd;
-
+		ArrayList<Node> visited = new ArrayList<Node>();
+		
 		while (true) {
 			// Break procedure if end of tree
 			if (currentBoard.gameOver()) {
 				currentNode.backPropagateScore(currentBoard.getScore());
+				//System.out.println("Le whut: " + Arrays.toString(currentBoard.getScore()));
 				if (scoreBounds) {
 					// This runs only if bounds propagation is enabled.
 					// It propagates bounds from solved nodes and prunes
@@ -71,7 +76,13 @@ public class MCTS {
 			}
 
 			if (currentNode.unvisitedChildren == null) {
-				currentNode.initializeUnexplored(currentBoard);
+				//currentNode.initializeUnexplored(currentBoard);
+				ArrayList<Move> legalMoves = currentBoard.getMoves();
+				currentNode.unvisitedChildren = new ArrayList<Node>();
+				for (int i = 0; i < legalMoves.size(); i++) {
+					Node tempState = new Node(currentBoard, legalMoves.get(i), currentNode);
+					currentNode.unvisitedChildren.add(tempState);
+				}
 			}
 
 			if (!currentNode.unvisitedChildren.isEmpty()) {
@@ -128,24 +139,30 @@ public class MCTS {
 	 *            this is the node whose children are considered
 	 * @return the best Move the algorithm can find
 	 */
-	private Move pickBest(Node n) {
+	private Move finalSelect(Node n) {
 		double bestValue = Double.NEGATIVE_INFINITY;
-		Node bestChild = null;
 		double tempBest;
+		ArrayList<Node> bestNodes = new ArrayList<Node>();
 
 		for (Node s : n.children) {
 			tempBest = s.score[n.player] / (double) s.games;
+			// tempBest += 1.0 / Math.sqrt(s.games);
 			// tempBest = Math.min(tempBest, s.opti[n.player]);
 			// tempBest = Math.max(tempBest, s.pess[n.player]);
-			if (tempBest >= bestValue) {
-				bestChild = s;
+			if (tempBest > bestValue) {
+				bestNodes.clear();
+				bestNodes.add(s);
 				bestValue = tempBest;
+			} else if (tempBest == bestValue) {
+				bestNodes.add(s);
 			}
 		}
 
-		System.out.println("Highest value: " + bestValue + ", O/P Bounds: "
-				+ bestChild.opti[n.player] + ", " + bestChild.pess[n.player]);
-		return bestChild.move;
+		Node finalNode = bestNodes.get(random.nextInt(bestNodes.size()));
+		
+		//System.out.println("Highest value: " + bestValue + ", O/P Bounds: "
+		//		+ finalNode.opti[n.player] + ", " + finalNode.pess[n.player]);
+		return finalNode.move;
 	}
 
 	/**
