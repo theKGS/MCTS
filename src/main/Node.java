@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Node {
 	public double[] score;
-	public int games;
+	public double games;
 	public Move move;
 	public ArrayList<Node> unvisitedChildren;
 	public ArrayList<Node> children;
@@ -62,8 +62,8 @@ public class Node {
 	 * @return
 	 */
 	public double upperConfidenceBound(double c) {
-		return score[parent.player] / (double) games + c
-				* Math.sqrt(Math.log(this.parent.games + 1) / (double) games);
+		return score[parent.player] / games + c
+				* Math.sqrt(Math.log(parent.games + 1) / games);
 	}
 
 	/**

@@ -145,7 +145,7 @@ public class MCTS {
 		ArrayList<Node> bestNodes = new ArrayList<Node>();
 
 		for (Node s : n.children) {
-			tempBest = s.score[n.player] / (double) s.games;
+			tempBest = s.games;
 			// tempBest += 1.0 / Math.sqrt(s.games);
 			// tempBest = Math.min(tempBest, s.opti[n.player]);
 			// tempBest = Math.max(tempBest, s.pess[n.player]);
@@ -160,8 +160,8 @@ public class MCTS {
 
 		Node finalNode = bestNodes.get(random.nextInt(bestNodes.size()));
 		
-		//System.out.println("Highest value: " + bestValue + ", O/P Bounds: "
-		//		+ finalNode.opti[n.player] + ", " + finalNode.pess[n.player]);
+		System.out.println("Highest value: " + bestValue + ", O/P Bounds: "
+				+ finalNode.opti[n.player] + ", " + finalNode.pess[n.player]);
 		return finalNode.move;
 	}
 

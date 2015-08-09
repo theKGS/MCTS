@@ -61,7 +61,7 @@ public class Main {
 		System.out.println("Score for this run: " + scorePlayer0 + " / " + scorePlayer1 + " Draws: " + draws);
 
 		try {
-		    FileOutputStream fos = new FileOutputStream("test.txt", true);
+		    FileOutputStream fos = new FileOutputStream("newRuns_5.txt", true);
 			Writer writer = new BufferedWriter(new OutputStreamWriter(fos, "UTF-8"));
 			
 		    writer.write("Iterations: " + it + " Exp. Con.: " + exp + ", Bounds = " + bounds + "\n");
@@ -80,14 +80,14 @@ public class Main {
 	}
 
 	public static void main(String[] args) {		
-		//run(100, 10000, 1.414, false, 0, 0);
-		run(100, 250000, 1.414, false, 0, 0);
-		//run(100, 50000, 1.414, false, 0, 0);
-		//run(100, 75000, 1.414, false, 0, 0);
-		//run(100, 100000, 1.414, false, 0, 0);
-		//run(100, 150000, 1.414, false, 0, 0);
-		//run(100, 200000, 1.414, false, 0, 0);
-		//run(100, 250000, 1.414, false, 0, 0);
-		//run(100, 300000, 1.414, false, 0, 0);	
+		run(100, 10000, 3.0, false, 0, 0);
+		run(100, 25000, 3.0, false, 0, 0);
+		run(100, 50000, 3.0, false, 0, 0);
+		run(100, 75000, 3.0, false, 0, 0);
+		run(100, 100000, 3.0, false, 0, 0);
+		run(100, 150000, 3.0, false, 0, 0);
+		run(100, 200000, 3.0, false, 0, 0);
+		run(100, 250000, 3.0, false, 0, 0);
+		run(100, 300000, 3.0, false, 0, 0);	
 	}
 }
