@@ -21,3 +21,7 @@ possible at the current state of the game.
 
 Node represents a node in the MCTS tree. This is only used
 internally.
+
+===Pending Changes===
+  * Flat MCTS is going the way of the dodo
+  * Support for stochastic moves will be added
