@@ -22,15 +22,6 @@ public class ConnectFour implements Board {
 			freeSlots[i] = 6;
 		winner = -1;
 	}
-		
-	@Override
-	public ArrayList<Board> duplicate(int n) {
-		ArrayList<Board> boardList = new ArrayList<Board>();
-		for (int i = 0; i < n; i++){
-			boardList.add(duplicate());
-		}
-		return boardList;
-	}
 
 	@Override
 	public Board duplicate(){

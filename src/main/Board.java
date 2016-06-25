@@ -5,14 +5,6 @@ import java.util.ArrayList;
 public interface Board {
 
 	/**
-	 * Create n copies of the board and return them in a list
-	 * 
-	 * @param n
-	 * @return
-	 */
-	public ArrayList<Board> duplicate(int n);
-
-	/**
 	 * Create one copy of the board. It is important that the copies do
 	 * not store references to objects shared by other boards unless
 	 * those objects are immutable.
