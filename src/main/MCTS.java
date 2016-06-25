@@ -50,6 +50,8 @@ public class MCTS {
 	 * 
 	 * @param node
 	 *            Node from which to start selection
+	 * @param brd
+	 * 			  Board state to work from.
 	 */
 	private void select(Board brd, Node node) {
 		Node currentNode = node;
@@ -59,7 +61,6 @@ public class MCTS {
 			// Break procedure if end of tree
 			if (currentBoard.gameOver()) {
 				currentNode.backPropagateScore(currentBoard.getScore());
-				//System.out.println("Le whut: " + Arrays.toString(currentBoard.getScore()));
 				if (scoreBounds) {
 					// This runs only if bounds propagation is enabled.
 					// It propagates bounds from solved nodes and prunes
@@ -70,8 +71,8 @@ public class MCTS {
 				return;
 			}
 
+			// We have not visited this node hence the list is null
 			if (currentNode.unvisitedChildren == null) {
-				//currentNode.initializeUnexplored(currentBoard);
 				ArrayList<Move> legalMoves = currentBoard.getMoves();
 				currentNode.unvisitedChildren = new ArrayList<Node>();
 				for (int i = 0; i < legalMoves.size(); i++) {
@@ -80,6 +81,7 @@ public class MCTS {
 				}
 			}
 
+			// This node has unexplored children
 			if (!currentNode.unvisitedChildren.isEmpty()) {
 				// it picks a move at random from list of unvisited children
 				Node temp = currentNode.unvisitedChildren.remove(random.nextInt(currentNode.unvisitedChildren.size()));
@@ -87,6 +89,8 @@ public class MCTS {
 				playout(temp, brd);
 				return;
 			} else {
+				// This node had no unexplored children
+				// hence we can proceed down to the next node
 				double bestValue = Double.NEGATIVE_INFINITY;
 				Node bestChild = null;
 				double tempBest;
@@ -161,7 +165,7 @@ public class MCTS {
 	}
 
 	/**
-	 * Playout function for MCTS (non-flat)
+	 * Playout function for MCTS
 	 * 
 	 * @param state
 	 * @return

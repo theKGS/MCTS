@@ -79,6 +79,10 @@ public class Node {
 			parent.backPropagateScore(scr);
 	}
 
+	public Node select(){
+		return null;
+	}
+	
 	/**
 	 * Backpropagate the bounds.
 	 * 
@@ -134,6 +138,7 @@ public class Node {
 			}
 		}
 
+		// TODO: This causes redundant pruning. Fix it
 		pruneBranches();
 		if (parent != null)
 			parent.backPropagateBoundsHelper();
