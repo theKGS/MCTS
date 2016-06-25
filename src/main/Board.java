@@ -20,36 +20,14 @@ public interface Board {
 	 */
 	public ArrayList<Move> getMoves();
 
-	/**
-	 * Returns true if the given player has won the game
-	 * 
-	 * @param player
-	 * @return
-	 */
-	public boolean checkWinCondition(int player);
-
 	public void makeMove(Move m);
-
-	/**
-	 * Returns true if the given player has lost the game
-	 * 
-	 * @param player
-	 * @return
-	 */
-	public boolean checkLossCondition(int player);
 
 	/**
 	 * Returns true if the game is over.
 	 * @return
 	 */
 	public boolean gameOver();	
-	
-	/**
-	 * Returns true if the game is a draw
-	 * @return
-	 */
-	public boolean checkDraw();
-	
+		
 	/**
 	 * Returns the player ID for the player whose turn is active. This method is
 	 * called by the MCTS.

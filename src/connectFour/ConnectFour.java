@@ -125,32 +125,6 @@ public class ConnectFour implements Board {
 		else
 			currentPlayer = 0;
 	}
-
-	@Override
-	public boolean checkWinCondition(int player) {
-		if (!draw){
-			return (player == winner);
-		}
-		
-		return false;
-	}
-
-	@Override
-	public boolean checkLossCondition(int player) {
-		if (!draw){
-			if (player == 1 && winner == 0)
-				return true;
-			if (player == 0 && winner == 1)
-				return true;
-		}		
-		
-		return false;
-	}
-
-	@Override
-	public boolean checkDraw() {
-		return draw;
-	}
 	
 	@Override
 	public int getQuantityOfPlayers(){
