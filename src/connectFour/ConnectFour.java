@@ -136,7 +136,6 @@ public class ConnectFour implements Board {
 		return currentPlayer;
 	}
 
-	@Override
 	public void print(){
 		System.out.println("--------------");
 		for (int y = 0; y < 6; y++){
