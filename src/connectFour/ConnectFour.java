@@ -1,7 +1,6 @@
 package connectFour;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import main.Board;
 import main.Move;

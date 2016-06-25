@@ -1,7 +1,6 @@
 package main;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Random;
 
 public class MCTS {
@@ -13,10 +12,7 @@ public class MCTS {
 
 	private boolean scoreBounds;
 	private boolean trackTime; // display thinking time used
-	private int timeLimit; // Set a time limit per move.
 
-	private ArrayList<Node> path;
-	
 	public MCTS() {
 		random = new Random();
 	}
@@ -58,7 +54,6 @@ public class MCTS {
 	private void select(Board brd, Node node) {
 		Node currentNode = node;
 		Board currentBoard = brd;
-		ArrayList<Node> visited = new ArrayList<Node>();
 		
 		while (true) {
 			// Break procedure if end of tree

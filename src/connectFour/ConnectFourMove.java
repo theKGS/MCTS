@@ -1,7 +1,5 @@
 package connectFour;
 
-import java.util.ArrayList;
-
 import main.Move;
 
 public class ConnectFourMove implements Move {
