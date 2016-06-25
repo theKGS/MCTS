@@ -5,13 +5,13 @@ Everything in the main package is related to the algorithm
 itself. The other package is a definition of a game which 
 the algorithm can play.
 
-MCTS specifies two important functions runMCTS and 
-runFlatMCTS (flat mcts will be removed, I figure it's not 
-really interesting to anybody). The former implements the 
-full algorithm with UCT default policy. The second implements 
-a flat algorithm that does not build a search tree. Either 
-function returns a Move instance which is the move the algorithm 
-has concluded is the best move to make.
+MCTS specifies the method runMCTS which implements the 
+full algorithm with UCT default policy. After thinking the
+specified number of iterations it will return a move.
+
+This move is what the algorithm concluded was the best move
+to make at this point in time. The more iterations you
+let it think, the better a movie will be returned.
 
 Board is an interface that must be implemented if you want
 to make the algorithm play your game. Move is another 
@@ -23,5 +23,4 @@ Node represents a node in the MCTS tree. This is only used
 internally.
 
 ===Pending Changes===
-  * Flat MCTS is going the way of the dodo
   * Support for stochastic moves will be added
