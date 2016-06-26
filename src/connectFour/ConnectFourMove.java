@@ -2,12 +2,17 @@ package connectFour;
 
 import main.Move;
 
+/**
+ * Moves are simple to manage for Connect Four. We
+ * store in each move only the row of the board
+ * where this piece will be inserted. The board
+ * itself is responsible for implementing
+ * the function that actually performs this move.
+  */
 public class ConnectFourMove implements Move {
-	int player;
 	int row;
 	
-	ConnectFourMove(int player, int row){
-		this.player = player;
+	ConnectFourMove(int row){
 		this.row = row;
 	}
 	

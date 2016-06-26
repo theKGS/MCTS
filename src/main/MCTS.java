@@ -20,8 +20,9 @@ public class MCTS {
 	/**
 	 * Run a UCT-MCTS simulation for a number of iterations.
 	 * 
-	 * @param s
-	 * @param runs
+	 * @param s starting board
+	 * @param runs how many iterations to think
+	 * @param bounds enable or disable score bounds.
 	 * @return
 	 */
 	public Move runMCTS(Board s, int runs, boolean bounds) {

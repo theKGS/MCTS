@@ -51,7 +51,7 @@ public class ConnectFour implements Board {
 		ArrayList<Move> moves = new ArrayList<Move>();
 		for (int i = 0; i < 7; i++){
 			if (freeSlots[i] > 0){
-				ConnectFourMove cfm = new ConnectFourMove(this.currentPlayer, i);
+				ConnectFourMove cfm = new ConnectFourMove(i);
 				moves.add(cfm);
 			}
 		}
