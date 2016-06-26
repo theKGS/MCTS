@@ -22,6 +22,11 @@ public class ConnectFour implements Board {
 		winner = -1;
 	}
 
+	/**
+	 * This duplicate method does not need to copy
+	 * winner and draw status as those variables
+	 * are only relevant when the game is over.
+	 */
 	@Override
 	public Board duplicate(){
 		ConnectFour newBoard = new ConnectFour();
@@ -33,10 +38,6 @@ public class ConnectFour implements Board {
 			}				
 		}
 		newBoard.currentPlayer = this.currentPlayer;
-		// The following two lines are not strictly necessary
-		// But they make the duplicate function consistent
-		newBoard.winner = this.winner;
-		newBoard.draw = this.draw;
 		for (int k = 0; k < 7; k++)
 			newBoard.freeSlots[k] = freeSlots[k];
 		newBoard.totalFreeSlots = totalFreeSlots;

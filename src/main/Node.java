@@ -79,12 +79,38 @@ public class Node {
 			parent.backPropagateScore(scr);
 	}
 
-	public Node select(){
-		return null;
+	public ArrayList<Node> select(double optimisticBias, double pessimisticBias, double explorationConstant){
+		double bestValue = Double.NEGATIVE_INFINITY;
+		Node bestChild = null;
+		double tempBest;
+		ArrayList<Node> bestNodes = new ArrayList<Node>();
+		for (Node s : children) {
+			// Pruned is only ever true if a branch has been pruned 
+			// from the tree and that can only happen if bounds 
+			// propagation mode is enabled.
+			if (s.pruned == false) {
+				tempBest = s.upperConfidenceBound(explorationConstant)
+						+ optimisticBias * s.opti[player]
+						+ pessimisticBias * s.pess[player];
+
+				// If we found a better node
+				if (tempBest > bestValue) {
+					bestNodes.clear();
+					bestNodes.add(s);
+					bestChild = s;
+					bestValue = tempBest;
+				} else if (tempBest == bestValue) {
+					// If we found an equal node
+					bestNodes.add(s);
+				}
+			}
+		}
+		
+		return bestNodes;
 	}
 	
 	/**
-	 * Backpropagate the bounds.
+	 * Set the bounds in the given node and propagate the values back up the tree.
 	 * 
 	 * @param optimistic
 	 * @param pessimistic

@@ -93,6 +93,8 @@ public class MCTS {
 			} else {
 				// This node had no unexplored children
 				// hence we can proceed down to the next node
+				
+				/*
 				double bestValue = Double.NEGATIVE_INFINITY;
 				Node bestChild = null;
 				double tempBest;
@@ -118,11 +120,13 @@ public class MCTS {
 							bestNodes.add(s);
 						}
 					}
-				}
+				}*/
 
+				ArrayList<Node> bestNodes = currentNode.select(optimisticBias, pessimisticBias, explorationConstant);
+				
 				// This only occurs when all branches have been pruned from the
 				// tree
-				if (currentNode == rootNode && bestChild == null)
+				if (currentNode == rootNode && !bestNodes.isEmpty())
 					return;
 
 				Node finalNode = bestNodes.get(random.nextInt(bestNodes.size()));

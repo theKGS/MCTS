@@ -8,7 +8,7 @@ import main.Move;
  * where this piece will be inserted. The board
  * itself is responsible for implementing
  * the function that actually performs this move.
-  */
+ */
 public class ConnectFourMove implements Move {
 	int row;
 	
