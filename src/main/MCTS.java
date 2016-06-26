@@ -24,7 +24,8 @@ public class MCTS {
 	 * @param runs
 	 * @return
 	 */
-	public Move runMCTS(Board s, int runs) {
+	public Move runMCTS(Board s, int runs, boolean bounds) {
+		scoreBounds = bounds;
 		rootNode = new Node(s);
 
 		long startTime = System.nanoTime();
@@ -205,10 +206,6 @@ public class MCTS {
 
 	public void setOptimisticBias(double b) {
 		optimisticBias = b;
-	}
-
-	public void setScoreBounds(boolean b) {
-		scoreBounds = b;
 	}
 
 	public void setTimeDisplay(boolean displayTime) {

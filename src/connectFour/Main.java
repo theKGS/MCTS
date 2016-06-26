@@ -24,7 +24,6 @@ public class Main {
 		player.setOptimisticBias(opti);
 		player.setPessimisticBias(pess);
 		player.setTimeDisplay(true);
-		player.setScoreBounds(bounds);
 		
 		scorePlayer0 = 0;
 		scorePlayer1 = 0;
@@ -34,7 +33,7 @@ public class Main {
 		for (int i = 0; i < games; i++) {
 			ConnectFour cf = new ConnectFour();
 			while (true) {
-				Move m = player.runMCTS(cf, it);
+				Move m = player.runMCTS(cf, it, bounds);
 				cf.makeMove(m);
 				cf.print();
 								
