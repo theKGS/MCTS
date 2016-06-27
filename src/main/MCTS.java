@@ -75,12 +75,7 @@ public class MCTS {
 
 			// We have not visited this node hence the list is null
 			if (currentNode.unvisitedChildren == null) {
-				ArrayList<Move> legalMoves = currentBoard.getMoves();
-				currentNode.unvisitedChildren = new ArrayList<Node>();
-				for (int i = 0; i < legalMoves.size(); i++) {
-					Node tempState = new Node(currentBoard, legalMoves.get(i), currentNode);
-					currentNode.unvisitedChildren.add(tempState);
-				}
+				currentNode.expandNode(currentBoard);
 			}
 
 			// If player ID is 0 or positive it means this is a normal node
@@ -185,13 +180,19 @@ public class MCTS {
 	}
 
 	/**
-	 * This affects final move selection.
+	 * This is multiplied by the pessimistic bounds of any
+	 * considered move during selection.	 
 	 * @param b
 	 */
 	public void setPessimisticBias(double b) {
 		pessimisticBias = b;
 	}
 
+	/**
+	 * This is multiplied by the optimistic bounds of any
+	 * considered move during selection.
+	 * @param b
+	 */
 	public void setOptimisticBias(double b) {
 		optimisticBias = b;
 	}

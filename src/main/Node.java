@@ -79,9 +79,29 @@ public class Node {
 			parent.backPropagateScore(scr);
 	}
 
+	
+	public void expandNode(Board currentBoard){
+		ArrayList<Move> legalMoves = currentBoard.getMoves();
+		unvisitedChildren = new ArrayList<Node>();
+		for (int i = 0; i < legalMoves.size(); i++) {
+			Node tempState = new Node(currentBoard, legalMoves.get(i), this);
+			unvisitedChildren.add(tempState);
+		}
+	}
+
+	
+	
+	
+	/**
+	 * Produce a list of viable nodes to visit. The actual 
+	 * selection is done in runMCTS
+	 * @param optimisticBias
+	 * @param pessimisticBias
+	 * @param explorationConstant
+	 * @return
+	 */
 	public ArrayList<Node> select(double optimisticBias, double pessimisticBias, double explorationConstant){
 		double bestValue = Double.NEGATIVE_INFINITY;
-		Node bestChild = null;
 		double tempBest;
 		ArrayList<Node> bestNodes = new ArrayList<Node>();
 		for (Node s : children) {
@@ -97,7 +117,6 @@ public class Node {
 				if (tempBest > bestValue) {
 					bestNodes.clear();
 					bestNodes.add(s);
-					bestChild = s;
 					bestValue = tempBest;
 				} else if (tempBest == bestValue) {
 					// If we found an equal node
