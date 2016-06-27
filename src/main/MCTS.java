@@ -83,55 +83,32 @@ public class MCTS {
 				}
 			}
 
-			// This node has unexplored children
-			if (!currentNode.unvisitedChildren.isEmpty()) {
-				// it picks a move at random from list of unvisited children
-				Node temp = currentNode.unvisitedChildren.remove(random.nextInt(currentNode.unvisitedChildren.size()));
-				currentNode.children.add(temp);
-				playout(temp, brd);
-				return;
-			} else {
-				// This node had no unexplored children
-				// hence we can proceed down to the next node
-				
-				/*
-				double bestValue = Double.NEGATIVE_INFINITY;
-				Node bestChild = null;
-				double tempBest;
-				ArrayList<Node> bestNodes = new ArrayList<Node>();
-
-				for (Node s : currentNode.children) {
-					// Pruned is only ever true if a branch has been pruned 
-					// from the tree and that can only happen if bounds 
-					// propagation mode is enabled.
-					if (s.pruned == false) {
-						tempBest = s.upperConfidenceBound(explorationConstant)
-								+ optimisticBias * s.opti[currentNode.player]
-								+ pessimisticBias * s.pess[currentNode.player];
-
-						// If we found a better node
-						if (tempBest > bestValue) {
-							bestNodes.clear();
-							bestNodes.add(s);
-							bestChild = s;
-							bestValue = tempBest;
-						} else if (tempBest == bestValue) {
-							// If we found an equal node
-							bestNodes.add(s);
-						}
-					}
-				}*/
-
-				ArrayList<Node> bestNodes = currentNode.select(optimisticBias, pessimisticBias, explorationConstant);
-				
-				// This only occurs when all branches have been pruned from the
-				// tree
-				if (currentNode == rootNode && !bestNodes.isEmpty())
+			// If player ID is 0 or positive it means this is a normal node
+			// A negative ID means the node is a random node
+			if (currentNode.player >= 0){
+				// This node has unexplored children
+				if (!currentNode.unvisitedChildren.isEmpty()) {
+					// it picks a move at random from list of unvisited children
+					Node temp = currentNode.unvisitedChildren.remove(random.nextInt(currentNode.unvisitedChildren.size()));
+					currentNode.children.add(temp);
+					playout(temp, brd);
 					return;
-
-				Node finalNode = bestNodes.get(random.nextInt(bestNodes.size()));
-				currentNode = finalNode;
-				currentBoard.makeMove(finalNode.move);
+				} else {
+					// This node had no unexplored children
+					// hence we can proceed down to the next node
+					ArrayList<Node> bestNodes = currentNode.select(optimisticBias, pessimisticBias, explorationConstant);
+					
+					// This only occurs when all branches have been 
+					// pruned from the tree 
+					if (currentNode == rootNode && !bestNodes.isEmpty())
+						return;
+					
+					Node finalNode = bestNodes.get(random.nextInt(bestNodes.size()));
+					currentNode = finalNode;
+					currentBoard.makeMove(finalNode.move);
+				}
+			} else {
+				
 			}
 		}
 	}
@@ -151,9 +128,11 @@ public class MCTS {
 
 		for (Node s : n.children) {
 			tempBest = s.games;
+			//tempBest += s.opti[n.player] * optimisticBias;
+			//tempBest += s.pess[n.player] * pessimisticBias;
 			// tempBest += 1.0 / Math.sqrt(s.games);
-			// tempBest = Math.min(tempBest, s.opti[n.player]);
-			// tempBest = Math.max(tempBest, s.pess[n.player]);
+			//tempBest = Math.min(tempBest, s.opti[n.player]);
+			//tempBest = Math.max(tempBest, s.pess[n.player]);
 			if (tempBest > bestValue) {
 				bestNodes.clear();
 				bestNodes.add(s);
@@ -205,6 +184,10 @@ public class MCTS {
 		explorationConstant = exp;
 	}
 
+	/**
+	 * This affects final move selection.
+	 * @param b
+	 */
 	public void setPessimisticBias(double b) {
 		pessimisticBias = b;
 	}
