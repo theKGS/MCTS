@@ -103,8 +103,10 @@ public class MCTS {
 					currentBoard.makeMove(finalNode.move);
 				}
 			} else {
-				// We're in a random node, so pick a node at random regardless
+				// We're in a random node, so pick a child at random
 				Node temp = currentNode.randomSelect(currentBoard);
+				currentNode = temp;
+				currentBoard.makeMove(temp.move);
 			}
 		}
 	}

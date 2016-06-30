@@ -200,4 +200,11 @@ public class ConnectFour implements Board {
 
 		return score;
 	}
+
+	// This is not used by connectFour, but it
+	// must be implemented anyway.
+	@Override
+	public double[] getMoveWeights() {
+		return null;
+	}
 }

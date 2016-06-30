@@ -13,7 +13,6 @@ public class Node {
 	public double[] pess;
 	public double[] opti;
 	public boolean pruned;
-	public int depth;
 	
 	/**
 	 * This creates the root node
@@ -40,7 +39,6 @@ public class Node {
 	public Node(Board b, Move m, Node prnt) {
 		children = new ArrayList<Node>();
 		parent = prnt;
-		depth = parent.depth + 1;
 		move = m;
 		Board tempBoard = b.duplicate();
 		tempBoard.makeMove(m);
@@ -201,11 +199,33 @@ public class Node {
 			parent.pruneBranches();
 	}
 
+	/**
+	 * Select a child node at random and return it.
+	 * @param board
+	 * @return
+	 */
 	public Node randomSelect(Board board) {
-		double []hello = board.getMoveWeights();
+		double []weights = board.getMoveWeights();
 		
+		double totalWeight = 0.0d;
+		for (int i = 0; i < weights.length; i++)
+		{
+		    totalWeight += weights[i];
+		}
 		
+		int randomIndex = -1;
+		double random = Math.random() * totalWeight;
+		for (int i = 0; i < weights.length; ++i)
+		{
+		    random -= weights[i];
+		    if (random <= 0.0d)
+		    {
+		        randomIndex = i;
+		        break;
+		    }
+		}
 		
-		return null;
+		Node rNode = unvisitedChildren.get(randomIndex);
+		return rNode;
 	}
 }
