@@ -93,7 +93,7 @@ public class MCTS {
 					// hence we can proceed down to the next node
 					ArrayList<Node> bestNodes = currentNode.select(optimisticBias, pessimisticBias, explorationConstant);
 					
-					// This only occurs when all branches have been 
+					// This only occurs if all branches have been 
 					// pruned from the tree 
 					if (currentNode == rootNode && !bestNodes.isEmpty())
 						return;
@@ -103,7 +103,8 @@ public class MCTS {
 					currentBoard.makeMove(finalNode.move);
 				}
 			} else {
-				
+				// We're in a random node, so pick a node at random regardless
+				Node temp = currentNode.randomSelect(currentBoard);
 			}
 		}
 	}

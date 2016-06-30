@@ -1,4 +1,4 @@
-# MCTS
+# Monte Carlo Tree Search
 Java implementation of UCT based MCTS.
 
 ## Main Algorithm

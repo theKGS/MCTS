@@ -14,7 +14,7 @@ public class Node {
 	public double[] opti;
 	public boolean pruned;
 	public int depth;
-
+	
 	/**
 	 * This creates the root node
 	 * 
@@ -79,7 +79,11 @@ public class Node {
 			parent.backPropagateScore(scr);
 	}
 
-	
+	/**
+	 * Expand this node by populating its list of
+	 * unvisited child nodes.
+	 * @param currentBoard
+	 */
 	public void expandNode(Board currentBoard){
 		ArrayList<Move> legalMoves = currentBoard.getMoves();
 		unvisitedChildren = new ArrayList<Node>();
@@ -89,9 +93,6 @@ public class Node {
 		}
 	}
 
-	
-	
-	
 	/**
 	 * Produce a list of viable nodes to visit. The actual 
 	 * selection is done in runMCTS
@@ -198,5 +199,13 @@ public class Node {
 
 		if (parent != null)
 			parent.pruneBranches();
+	}
+
+	public Node randomSelect(Board board) {
+		double []hello = board.getMoveWeights();
+		
+		
+		
+		return null;
 	}
 }

@@ -66,7 +66,16 @@ public interface Board {
 	 * [1.0, 0.0] indicates a win for player 0.
 	 * [0.0, 1.0] indicates a win for player 1
 	 * [0.5, 0.5] indicates a draw
-	 * @return
+	 * @return score array
 	 */
 	public double[] getScore();
+
+	/**
+	 * Returns an array of probability weights
+	 * for each move possible on this board. This
+	 * is only relevant in board states where
+	 * the choice to make is a random choice.
+	 * @return array of weights
+	 */
+	public double[] getMoveWeights();
 }
