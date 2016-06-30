@@ -166,7 +166,39 @@ public class MCTS {
 			}
 
 			moves = brd.getMoves();
-			mv = moves.get(random.nextInt(moves.size()));
+			if (brd.getCurrentPlayer() >= 0) {
+				// make random selection normally
+				mv = moves.get(random.nextInt(moves.size()));
+			} else {
+				/*
+				 * This situation only occurs when a move
+				 * is entirely random, for example a die
+				 * roll. We must consider the random weights
+				 * of the moves. 
+				 */
+				double []weights = board.getMoveWeights();
+				
+				double totalWeight = 0.0d;
+				for (int i = 0; i < weights.length; i++)
+				{
+				    totalWeight += weights[i];
+				}
+				
+				int randomIndex = -1;
+				double random = Math.random() * totalWeight;
+				for (int i = 0; i < weights.length; ++i)
+				{
+				    random -= weights[i];
+				    if (random <= 0.0d)
+				    {
+				        randomIndex = i;
+				        break;
+				    }
+				}
+				
+				mv = moves.get(randomIndex);
+			}
+									
 			brd.makeMove(mv);
 		}
 	}
