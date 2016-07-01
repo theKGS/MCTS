@@ -36,33 +36,33 @@ public class MCTS {
 		boolean[] finishedcores = new boolean[cores];
 		final int runs_f = runs;
 		final Board s_f = s.duplicate();
-		for (int c = 0; c < cores; c++) {
-			final int c_f = c;
-			Thread t = new Thread(()-> {
-				for (int i = 0; i < runs_f/cores; i++) {
-					select(s_f.duplicate(), rootNode);
-				}
-				finishedcores[c_f]=true;
-				synchronized(MCTS.this){
-					notify();
-				}
-			});
-			t.setName("Select thread "+c);
-			t.setDaemon(true);
-			t.start();
-		}
-		boolean finished = false;
-		while(finished == false) {
-			finished = true;
-			for (boolean core : finishedcores) {
-				if (core == false) {
-					finished = false;
-					break;
-				}
+		synchronized(MCTS.this){
+			for (int c = 0; c < cores; c++) {
+				final int c_f = c;
+				Thread t = new Thread(()-> {
+					for (int i = 0; i < runs_f/cores; i++) {
+						select(s_f.duplicate(), rootNode);
+					}
+					finishedcores[c_f]=true;
+					synchronized(MCTS.this){
+						notify();
+					}
+				});
+				t.setName("Select thread "+c);
+				t.setDaemon(true);
+				t.start();
 			}
-			if (finished == false) {
-				synchronized(this){
+			boolean finished = false;
+			while(finished == false) {
+				if (finished == false) {
 					try {wait(400);} catch (InterruptedException e) {e.printStackTrace();}
+				}
+				finished = true;
+				for (boolean core : finishedcores) {
+					if (core == false) {
+						finished = false;
+						break;
+					}
 				}
 			}
 		}
