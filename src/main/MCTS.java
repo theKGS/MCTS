@@ -53,14 +53,16 @@ public class MCTS {
 		}
 		boolean finished = false;
 		while(finished == false) {
-			synchronized(this){
-				try {wait(1000);} catch (InterruptedException e) {e.printStackTrace();}
-			}
 			finished = true;
 			for (boolean core : finishedcores) {
 				if (core == false) {
 					finished = false;
 					break;
+				}
+			}
+			if (finished == false) {
+				synchronized(this){
+					try {wait(400);} catch (InterruptedException e) {e.printStackTrace();}
 				}
 			}
 		}
