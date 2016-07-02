@@ -97,7 +97,7 @@ public class MCTS {
 					
 					// This only occurs if all branches have been 
 					// pruned from the tree 
-					if (currentNode == rootNode && !bestNodes.isEmpty())
+					if (currentNode == rootNode && bestNodes.isEmpty())
 						return;
 					
 					Node finalNode = bestNodes.get(random.nextInt(bestNodes.size()));
@@ -106,10 +106,6 @@ public class MCTS {
 				}
 			} else {
 				// We're in a random node, so pick a child at random
-				if (currentNode.rVisited == null)
-					currentNode.rVisited = new HashSet<Integer>();
-								
-				System.out.println("Random node");
 				int indexOfMove = currentNode.randomSelect(currentBoard);
 				currentNode = currentNode.unvisitedChildren.get(indexOfMove);
 				currentBoard.makeMove(currentNode.move);
