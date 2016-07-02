@@ -88,7 +88,8 @@ public class MCTS {
 					// it picks a move at random from list of unvisited children
 					Node temp = currentNode.unvisitedChildren.remove(random.nextInt(currentNode.unvisitedChildren.size()));
 					currentNode.children.add(temp);
-					playout(temp, brd);
+					currentBoard.makeMove(temp.move);
+					playout(temp, currentBoard);
 					return;
 				} else {
 					// This node had no unexplored children
@@ -105,10 +106,25 @@ public class MCTS {
 					currentBoard.makeMove(finalNode.move);
 				}
 			} else {
+				if (currentNode.rVisited == null)
+					currentNode.rVisited = new HashSet<Integer>();
+				
 				// We're in a random node, so pick a child at random
 				int indexOfMove = currentNode.randomSelect(currentBoard);
-				currentNode = currentNode.unvisitedChildren.get(indexOfMove);
-				currentBoard.makeMove(currentNode.move);
+				
+				if (currentNode.rVisited.contains(indexOfMove)){
+					// The node has been visited previously
+					// So we can just proceed down
+					currentNode = currentNode.unvisitedChildren.get(indexOfMove);
+					currentBoard.makeMove(currentNode.move);
+				} else {
+					// The node has never been visited, so
+					// we run a playout from it, and quit
+					currentNode = currentNode.unvisitedChildren.get(indexOfMove);
+					currentBoard.makeMove(currentNode.move);
+					playout(currentNode, currentBoard);
+					return;					
+				}
 			}
 		}
 	}
