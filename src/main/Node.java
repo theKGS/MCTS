@@ -1,6 +1,7 @@
 package main;
 
 import java.util.ArrayList;
+import java.util.Set;
 
 public class Node {
 	public double[] score;
@@ -8,6 +9,7 @@ public class Node {
 	public Move move;
 	public ArrayList<Node> unvisitedChildren;
 	public ArrayList<Node> children;
+	public Set<Integer> rVisited;
 	public Node parent;
 	public int player;
 	public double[] pess;
@@ -204,7 +206,7 @@ public class Node {
 	 * @param board
 	 * @return
 	 */
-	public Node randomSelect(Board board) {
+	public int randomSelect(Board board) {
 		double []weights = board.getMoveWeights();
 		
 		double totalWeight = 0.0d;
@@ -225,7 +227,7 @@ public class Node {
 		    }
 		}
 		
-		Node rNode = unvisitedChildren.get(randomIndex);
-		return rNode;
+		//Node rNode = unvisitedChildren.get(randomIndex);
+		return randomIndex;
 	}
 }

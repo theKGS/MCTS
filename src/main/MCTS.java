@@ -1,7 +1,9 @@
 package main;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Random;
+import java.util.Set;
 
 public class MCTS {
 	private Random random;
@@ -104,9 +106,13 @@ public class MCTS {
 				}
 			} else {
 				// We're in a random node, so pick a child at random
-				Node temp = currentNode.randomSelect(currentBoard);
-				currentNode = temp;
-				currentBoard.makeMove(temp.move);
+				if (currentNode.rVisited == null)
+					currentNode.rVisited = new HashSet<Integer>();
+								
+				System.out.println("Random node");
+				int indexOfMove = currentNode.randomSelect(currentBoard);
+				currentNode = currentNode.unvisitedChildren.get(indexOfMove);
+				currentBoard.makeMove(currentNode.move);
 			}
 		}
 	}
@@ -176,7 +182,7 @@ public class MCTS {
 				 * roll. We must consider the random weights
 				 * of the moves. 
 				 */
-				double []weights = board.getMoveWeights();
+				double []weights = brd.getMoveWeights();
 				
 				double totalWeight = 0.0d;
 				for (int i = 0; i < weights.length; i++)
