@@ -14,6 +14,8 @@ public class MCTS {
 
 	private boolean scoreBounds;
 	private boolean trackTime; // display thinking time used
+	
+	private final int cores = Runtime.getRuntime().availableProcessors();
 
 	public MCTS() {
 		random = new Random();
@@ -32,15 +34,45 @@ public class MCTS {
 		rootNode = new Node(s);
 
 		long startTime = System.nanoTime();
-
-		for (int i = 0; i < runs; i++) {
-			select(s.duplicate(), rootNode);
+		
+		boolean[] finishedcores = new boolean[cores];
+		final int runs_f = runs;
+		final Board s_f = s.duplicate();
+		synchronized(MCTS.this){
+			for (int c = 0; c < cores; c++) {
+				final int c_f = c;
+				Thread t = new Thread(()-> {
+					for (int i = 0; i < runs_f/cores; i++) {
+						select(s_f.duplicate(), rootNode);
+					}
+					finishedcores[c_f]=true;
+					synchronized(MCTS.this){
+						notify();
+					}
+				});
+				t.setName("Select thread "+c);
+				t.setDaemon(true);
+				t.start();
+			}
+			boolean finished = false;
+			while(finished == false) {
+				if (finished == false) {
+					try {wait(400);} catch (InterruptedException e) {e.printStackTrace();}
+				}
+				finished = true;
+				for (boolean core : finishedcores) {
+					if (core == false) {
+						finished = false;
+						break;
+					}
+				}
+			}
 		}
 
 		long endTime = System.nanoTime();
 
 		if (this.trackTime)
-			System.out.println("Thinking time per move in milliseconds: "
+			Log.log("Thinking time per move in milliseconds: "
 					+ (endTime - startTime) / 1000000);
 
 		return finalSelect(rootNode);
@@ -57,7 +89,7 @@ public class MCTS {
 	 * @param brd
 	 * 			  Board state to work from.
 	 */
-	private void select(Board brd, Node node) {
+	private synchronized void select(Board brd, Node node) {
 		Node currentNode = node;
 		Board currentBoard = brd;
 		
@@ -160,7 +192,7 @@ public class MCTS {
 
 		Node finalNode = bestNodes.get(random.nextInt(bestNodes.size()));
 		
-		System.out.println("Highest value: " + bestValue + ", O/P Bounds: "
+		Log.log("Highest value: " + bestValue + ", O/P Bounds: "
 				+ finalNode.opti[n.player] + ", " + finalNode.pess[n.player]);
 		return finalNode.move;
 	}
