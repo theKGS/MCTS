@@ -3,8 +3,10 @@ Java implementation of UCT based MCTS.
 
 ## Main Algorithm
 Everything in the main package is related to the algorithm 
-itself. The other package (connectFour) is an implementation
-of a game which the algorithm can play. Use it for reference.
+itself. The other packages (connectFour, twothousandfortyeight) 
+are implementations of games which the algorithm can play. 
+Use them for reference. As of now 2048 is broken, but 
+Connect Four works fine.
 
 MCTS specifies the method runMCTS which implements the 
 full algorithm with UCT default policy. After thinking for
