@@ -42,9 +42,6 @@ public class ConnectFour implements Board {
 		return newBoard;		
 	}
 	
-	/**
-	 * This function 
-	 */
 	@Override
 	public ArrayList<Move> getMoves() {
 		ArrayList<Move> moves = new ArrayList<Move>();
@@ -80,7 +77,7 @@ public class ConnectFour implements Board {
 	
 	private int scanLine(int x, int y, int xf, int yf, int playr){
 		int sum = 0;
-		for (int i = 1; i < 6; i++){
+		for (int i = 1; i < 4; i++){
 			if (x + i * xf > 6 || x + i * xf < 0)
 				break;
 			if (y + i * yf > 5 || y + i * yf < 0)
