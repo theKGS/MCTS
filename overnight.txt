@@ -25,3 +25,25 @@ Score for this run: 99 / 1
 Iterations: 300000 Exp. Con.: 1.414, Bounds = false
 pessBias: 0.0 optiBias: 0.0
 Score for this run: 100 / 0
+
+//// NEW VERSION BELOW ////
+
+Iterations: 5000 Exp. Con.: 1.4, Bounds = false
+pessBias: 0.0 optiBias: 0.0
+Score for this run: 49 / 48 Draws: 3
+
+Iterations: 10000 Exp. Con.: 1.4, Bounds = false
+pessBias: 0.0 optiBias: 0.0
+Score for this run: 59 / 36 Draws: 5
+
+Iterations: 25000 Exp. Con.: 1.4, Bounds = false
+pessBias: 0.0 optiBias: 0.0
+Score for this run: 75 / 22 Draws: 3
+
+Iterations: 50000 Exp. Con.: 1.4
+pessBias: 0.0 optiBias: 0.0
+Score for this run: 73 / 12 Draws: 15
+
+Iterations: 200000 Exp. Con.: 1.4, Bounds = false
+pessBias: 0.0 optiBias: 0.0
+Score for this run: 23 / 77 Draws: 0

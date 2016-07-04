@@ -35,7 +35,7 @@ public class Main {
 			while (true) {
 				Move m = player.runMCTS(cf, it, bounds);
 				cf.makeMove(m);
-				cf.print();
+				//cf.print();
 								
 				if (cf.gameOver()) {
 					scr = cf.getScore();
@@ -47,6 +47,7 @@ public class Main {
 						draws ++;
 					}
 
+					cf.print();
 					System.out.println("Score Vector: " + Arrays.toString(scr));
 					System.out.println(i + ": Scores: " + scorePlayer0 + " / " + scorePlayer1 + " Draws: " + draws);
 					break;
@@ -79,14 +80,14 @@ public class Main {
 	}
 
 	public static void main(String[] args) {		
-		run(100, 10000, 3.0, false, 0, 0);
-		run(100, 25000, 3.0, false, 0, 0);
-		run(100, 50000, 3.0, false, 0, 0);
-		run(100, 75000, 3.0, false, 0, 0);
-		run(100, 100000, 3.0, false, 0, 0);
-		run(100, 150000, 3.0, false, 0, 0);
-		run(100, 200000, 3.0, false, 0, 0);
-		run(100, 250000, 3.0, false, 0, 0);
-		run(100, 300000, 3.0, false, 0, 0);	
+		run(100, 25000, 1.4, false, 0, 0);
+		//run(100, 25000, 3.0, false, 0, 0);
+		//run(100, 50000, 3.0, false, 0, 0);
+		//run(100, 75000, 3.0, false, 0, 0);
+		//run(100, 100000, 3.0, false, 0, 0);
+		//run(100, 150000, 3.0, false, 0, 0);
+		//run(100, 200000, 3.0, false, 0, 0);
+		//run(100, 250000, 3.0, false, 0, 0);
+		//run(100, 300000, 3.0, false, 0, 0);	
 	}
 }

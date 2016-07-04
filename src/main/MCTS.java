@@ -160,8 +160,8 @@ public class MCTS {
 
 		Node finalNode = bestNodes.get(random.nextInt(bestNodes.size()));
 		
-		System.out.println("Highest value: " + bestValue + ", O/P Bounds: "
-				+ finalNode.opti[n.player] + ", " + finalNode.pess[n.player]);
+		//System.out.println("Highest value: " + bestValue + ", O/P Bounds: "
+		//		+ finalNode.opti[n.player] + ", " + finalNode.pess[n.player]);
 		return finalNode.move;
 	}
 
