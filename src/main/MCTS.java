@@ -144,8 +144,8 @@ public class MCTS {
 
 		for (Node s : n.children) {
 			tempBest = s.games;
-			//tempBest += s.opti[n.player] * optimisticBias;
-			//tempBest += s.pess[n.player] * pessimisticBias;
+			tempBest += s.opti[n.player] * optimisticBias;
+			tempBest += s.pess[n.player] * pessimisticBias;
 			// tempBest += 1.0 / Math.sqrt(s.games);
 			//tempBest = Math.min(tempBest, s.opti[n.player]);
 			//tempBest = Math.max(tempBest, s.pess[n.player]);

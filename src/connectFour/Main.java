@@ -39,9 +39,9 @@ public class Main {
 								
 				if (cf.gameOver()) {
 					scr = cf.getScore();
-					if (scr[0] == 1.0) {
+					if (scr[0] > 0.8) {
 						scorePlayer0++;
-					} else if (scr[1] == 1.0) {
+					} else if (scr[1] > 0.8) {
 						scorePlayer1++;
 					} else {
 						draws ++;
@@ -80,7 +80,7 @@ public class Main {
 	}
 
 	public static void main(String[] args) {		
-		run(100, 25000, 1.4, false, 0, 0);
+		run(100, 75000, 1.4, false, 0, 0);
 		//run(100, 25000, 3.0, false, 0, 0);
 		//run(100, 50000, 3.0, false, 0, 0);
 		//run(100, 75000, 3.0, false, 0, 0);

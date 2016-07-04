@@ -7,12 +7,12 @@ import main.Move;
 
 public class ConnectFour implements Board {
 
-	private boolean[][][] brd;
-	private int currentPlayer = 0;
-	private int freeSlots[];
-	private int totalFreeSlots = 6 * 7;
-	private int winner = -1;
-	private boolean draw = false;
+	public boolean[][][] brd;
+	public int currentPlayer = 0;
+	public int freeSlots[];
+	public int totalFreeSlots = 6 * 7;
+	public int winner = -1;
+	public boolean draw = false;
 
 	public ConnectFour(){
 		brd = new boolean[7][6][2];

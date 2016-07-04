@@ -12,7 +12,7 @@ import main.Move;
 public class ConnectFourMove implements Move {
 	int row;
 	
-	ConnectFourMove(int row){
+	public ConnectFourMove(int row){
 		this.row = row;
 	}
 	
