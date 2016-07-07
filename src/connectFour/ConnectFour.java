@@ -7,7 +7,7 @@ import main.Move;
 
 public class ConnectFour implements Board {
 
-	public boolean[][][] brd;
+	public int[][] board;
 	public int currentPlayer = 0;
 	public int freeSlots[];
 	public int totalFreeSlots = 6 * 7;
@@ -15,7 +15,7 @@ public class ConnectFour implements Board {
 	public boolean draw = false;
 
 	public ConnectFour(){
-		brd = new boolean[7][6][2];
+		board = new int[7][6];
 		freeSlots = new int[7];
 		for (int i = 0; i < 7; i++)
 			freeSlots[i] = 6;
@@ -29,7 +29,7 @@ public class ConnectFour implements Board {
 		for (int x = 0; x < 7; x++){
 			for (int y = 0; y < 6; y++){
 				for (int z = 0; z < 2; z++){
-					newBoard.brd[x][y][z] = brd[x][y][z];
+					newBoard.board[x][y] = board[x][y];
 				}	
 			}				
 		}
@@ -74,7 +74,7 @@ public class ConnectFour implements Board {
 				risingDiagonal >= 4 || sinkingDiagonal >= 4);
 	}
 	
-	private int scanLine(int x, int y, int xf, int yf, int playr){
+	private int scanLine(int x, int y, int xf, int yf, int playerID){
 		int sum = 0;
 		for (int i = 1; i < 4; i++){
 			if (x + i * xf > 6 || x + i * xf < 0)
@@ -82,7 +82,7 @@ public class ConnectFour implements Board {
 			if (y + i * yf > 5 || y + i * yf < 0)
 				break;
 			
-			if (brd[x + i * xf][y + i * yf][playr])
+			if (board[x + i * xf][y + i * yf] == playerID + 1)
 				sum++;
 			else
 				break;
@@ -98,7 +98,7 @@ public class ConnectFour implements Board {
 		int xIndex = cfm.row;
 		int yIndex = freeSlots[cfm.row] - 1;
 		
-		brd[xIndex][yIndex][currentPlayer] = true;
+		board[xIndex][yIndex] = currentPlayer + 1;
 		freeSlots[xIndex]--;
 		totalFreeSlots--;
 
@@ -131,11 +131,11 @@ public class ConnectFour implements Board {
 		System.out.println("--------------");
 		for (int y = 0; y < 6; y++){
 			for (int x = 0; x < 7; x++){
-				if (brd[x][y][0] && !brd[x][y][1])
+				if (board[x][y] == 1)
 					System.out.print("()");
-				else if (!brd[x][y][0] && brd[x][y][1])
+				else if (board[x][y] == 2)
 					System.out.print("<>");
-				else if (!brd[x][y][0] && !brd[x][y][1])
+				else if (board[x][y] == 0)
 					System.out.print("  ");
 				else
 					System.out.print("{}");
