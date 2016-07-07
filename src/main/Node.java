@@ -103,14 +103,13 @@ public class Node {
 	 */
 	public ArrayList<Node> select(double optimisticBias, double pessimisticBias, double explorationConstant){
 		double bestValue = Double.NEGATIVE_INFINITY;
-		double tempBest;
 		ArrayList<Node> bestNodes = new ArrayList<Node>();
 		for (Node s : children) {
 			// Pruned is only ever true if a branch has been pruned 
 			// from the tree and that can only happen if bounds 
 			// propagation mode is enabled.
 			if (s.pruned == false) {
-				tempBest = s.upperConfidenceBound(explorationConstant)
+				final double tempBest = s.upperConfidenceBound(explorationConstant)
 						+ optimisticBias * s.opti[player]
 						+ pessimisticBias * s.pess[player];
 
@@ -130,15 +129,17 @@ public class Node {
 	}
 	
 	/**
-	 * Set the bounds in the given node and propagate the values back up the tree.
+	 * Set the bounds in the given node and propagate the values 
+	 * back up the tree. When bounds are first created they are
+	 * both equivalent to a player's score.
 	 * 
 	 * @param optimistic
 	 * @param pessimistic
 	 */
-	public void backPropagateBounds(double[] optimistic, double[] pessimistic) {
-		for (int i = 0; i < optimistic.length; i++) {
-			opti[i] = optimistic[i];
-			pess[i] = pessimistic[i];
+	public void backPropagateBounds(double[] score) {
+		for (int i = 0; i < score.length; i++) {
+			opti[i] = score[i];
+			pess[i] = score[i];
 		}
 
 		if (parent != null)

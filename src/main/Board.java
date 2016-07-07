@@ -51,17 +51,6 @@ public interface Board {
 	public int getQuantityOfPlayers();
 	
 	/**
-	 * Return the pessimistic/optimistic bounds for the 
-	 * current state of the game. Note that you will 
-	 * only need to actually implement these if you are 
-	 * running MCTS with bounds enabled. 
-	 * 
-	 * @return
-	 */
-	public double[] pessimisticBounds();
-	public double[] optimisticBounds();
-	
-	/**
 	 * Returns a score vector. 
 	 * [1.0, 0.0] indicates a win for player 0.
 	 * [0.0, 1.0] indicates a win for player 1

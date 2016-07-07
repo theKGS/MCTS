@@ -58,10 +58,7 @@ public class MCTS {
 	 * @param brd
 	 * 			  Board state to work from.
 	 */
-	private void select(Board brd, Node node) {
-		Node currentNode = node;
-		Board currentBoard = brd;
-		
+	private void select(Board currentBoard, Node currentNode) {
 		while (true) {
 			// Break procedure if end of tree
 			if (currentBoard.gameOver()) {
@@ -70,8 +67,7 @@ public class MCTS {
 					// This runs only if bounds propagation is enabled.
 					// It propagates bounds from solved nodes and prunes
 					// branches from the when needed.
-					currentNode.backPropagateBounds(currentBoard.optimisticBounds(),
-							currentBoard.pessimisticBounds());
+					currentNode.backPropagateBounds(currentBoard.getScore());
 				}
 				return;
 			}

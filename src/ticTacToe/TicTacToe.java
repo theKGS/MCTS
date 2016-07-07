@@ -118,36 +118,6 @@ public class TicTacToe implements Board {
 	}
 
 	@Override
-	public double[] pessimisticBounds() {
-		double []bounds;
-		bounds = new double[2];
-		
-		if (!draw) {
-			bounds[winner] = 1.0d;
-		} else {
-			bounds[0] = 0.5d;
-			bounds[1] = 0.5d;
-		}
-		 
-		return bounds;
-	}
-	
-	@Override
-	public double[] optimisticBounds() {
-		double []bounds;
-		bounds = new double[2];
-
-		if (!draw) {
-			bounds[winner] = 1.0d;
-		} else {
-			bounds[0] = 0.5d;
-			bounds[1] = 0.5d;
-		}
-		
-		return bounds;
-	}
-	
-	@Override
 	public void bPrint() {
 		for (int y = 0; y < 3; y++) {
 			for (int x = 0; x < 3; x++) {

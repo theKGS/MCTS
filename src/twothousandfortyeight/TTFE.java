@@ -234,16 +234,6 @@ public class TTFE implements Board {
 	}
 
 	@Override
-	public double[] pessimisticBounds() {
-		return null;
-	}
-
-	@Override
-	public double[] optimisticBounds() {
-		return null;
-	}
-
-	@Override
 	public double[] getScore() {
 		double []score = new double[1];
 		if (scoremax == 9)

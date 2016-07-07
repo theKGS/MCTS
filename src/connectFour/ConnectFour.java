@@ -150,36 +150,6 @@ public class ConnectFour implements Board {
 	}
 	
 	@Override
-	public double[] pessimisticBounds() {
-		double[] pessimistic = new double[2];
-		
-		if (winner >= 0){
-			pessimistic[winner] = 1;		
-		} else { // draw
-			pessimistic[0] = 0.5;
-			pessimistic[1] = 0.5;
-		}
-		
-		//System.out.println(Arrays.toString(pessimistic));
-		return pessimistic;
-	}
-
-	@Override
-	public double[] optimisticBounds() {
-		double[] optimistic = new double[2];
-
-		if (winner >= 0){
-			optimistic[winner] = 1.0d;		
-		} else { // draw
-			optimistic[0] = 0.5;
-			optimistic[1] = 0.5;			
-		}
-
-		//System.out.println(Arrays.toString(optimistic));
-		return optimistic;
-	}
-
-	@Override
 	public double[] getScore() {
 		double[] score = new double[2];
 		if (winner >= 0)
