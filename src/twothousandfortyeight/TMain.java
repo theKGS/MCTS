@@ -22,7 +22,6 @@ public class TMain {
 		b.makeMove(move);		
 		
 		while (!b.gameOver()){
-			
 			if (b.currentPlayer == 0) {
 				move = mcts.runMCTS(b, 250000, false);
 				b.makeMove(move);

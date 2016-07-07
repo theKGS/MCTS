@@ -31,6 +31,8 @@ public class MCTS {
 		scoreBounds = bounds;
 		rootNode = new Node(s);
 
+		System.out.println("Making choice for player: " + rootNode.player);
+		
 		long startTime = System.nanoTime();
 
 		for (int i = 0; i < runs; i++) {

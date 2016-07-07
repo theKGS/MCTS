@@ -70,7 +70,6 @@ public class ConnectFour implements Board {
 		sinkingDiagonal += scanLine(x, y, 1, 1, pl);
 		sinkingDiagonal += scanLine(x, y, -1, -1, pl);
 		
-		//System.out.println(horizontal + " " + vertical  + " " + risingDiagonal  + " " + sinkingDiagonal);
 		return (horizontal >= 4 || vertical >= 4 ||
 				risingDiagonal >= 4 || sinkingDiagonal >= 4);
 	}
@@ -99,7 +98,6 @@ public class ConnectFour implements Board {
 		int xIndex = cfm.row;
 		int yIndex = freeSlots[cfm.row] - 1;
 		
-		//System.out.println("Making move in: " + xIndex + "/" +yIndex + " freeslots: " + freeSlots[cfm.row]);
 		brd[xIndex][yIndex][currentPlayer] = true;
 		freeSlots[xIndex]--;
 		totalFreeSlots--;
@@ -107,8 +105,6 @@ public class ConnectFour implements Board {
 		// Check if the move won the game, if so update the winner
 		if (thisMoveWonTheGame(xIndex, yIndex, currentPlayer)){
 			winner = currentPlayer;
-			//System.out.println("Winner updated!");
-			//this.print();
 		} else {
 			if (totalFreeSlots == 0)
 				draw = true;
@@ -201,5 +197,11 @@ public class ConnectFour implements Board {
 	@Override
 	public double[] getMoveWeights() {
 		return null;
+	}
+
+	@Override
+	public void bPrint() {
+		// TODO Auto-generated method stub
+		
 	}
 }

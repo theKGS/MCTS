@@ -274,4 +274,10 @@ public class TTFE implements Board {
 		
 		return weights;
 	}
+
+	@Override
+	public void bPrint() {
+		// TODO Auto-generated method stub
+		
+	}
 }

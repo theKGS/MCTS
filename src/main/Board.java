@@ -78,4 +78,6 @@ public interface Board {
 	 * @return array of weights
 	 */
 	public double[] getMoveWeights();
+	
+	public void bPrint();
 }

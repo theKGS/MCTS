@@ -8,6 +8,7 @@ import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.util.Arrays;
+import java.util.Scanner;
 
 import main.MCTS;
 import main.Move;
@@ -30,11 +31,26 @@ public class Main {
 		draws = 0;
 		scr = new double[2];
 		
+		// Set this to true to take control yourself!
+		boolean playerControl = false;
+		int activePlayerID = 0;
+		Scanner readline = new Scanner(System.in);
+
 		for (int i = 0; i < games; i++) {
 			ConnectFour cf = new ConnectFour();
 			while (true) {
-				Move m = player.runMCTS(cf, it, bounds);
-				cf.makeMove(m);
+				cf.print();
+
+				if (cf.currentPlayer != activePlayerID || !playerControl) {
+					Move m = player.runMCTS(cf, it, bounds);
+					cf.makeMove(m);
+				} else {
+					System.out.println("Enter a row: ");
+					int n = readline.nextInt();
+					Move m = new ConnectFourMove(n);
+					cf.makeMove(m);	
+				}
+				
 				//cf.print();
 								
 				if (cf.gameOver()) {
@@ -55,6 +71,7 @@ public class Main {
 			}
 				
 		}
+		readline.close();
 
 		System.out.println("Iterations: " + it + " Exp. Con.: " + exp);
 		System.out.println("pessBias: " + pess + " optiBias: " + opti);
@@ -80,7 +97,7 @@ public class Main {
 	}
 
 	public static void main(String[] args) {		
-		run(100, 75000, 1.4, false, 0, 0);
+		run(100, 10000, 3.0, false, 0, 0);
 		//run(100, 25000, 3.0, false, 0, 0);
 		//run(100, 50000, 3.0, false, 0, 0);
 		//run(100, 75000, 3.0, false, 0, 0);

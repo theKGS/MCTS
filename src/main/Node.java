@@ -62,7 +62,7 @@ public class Node {
 	 * @return
 	 */
 	public double upperConfidenceBound(double c) {
-		return score[parent.player] / games + c
+		return score[parent.player] / games  + c
 				* Math.sqrt(Math.log(parent.games + 1) / games);
 	}
 
