@@ -6,7 +6,7 @@ import java.util.Arrays;
 import main.MCTS;
 import main.Move;
 
-public class Main {
+public class TTTMain {
 
 	public static void main(String[] args) {
 		MCTS mcts = new MCTS();
@@ -19,7 +19,7 @@ public class Main {
 		for (int i = 0; i < 100; i ++) {
 			TicTacToe ttt = new TicTacToe();
 			while (!ttt.gameOver()){
-				move = mcts.runMCTS(ttt, 600000, false);
+				move = mcts.runMCTS(ttt, 2000, false);
 				ttt.makeMove(move);
 			}
 			

@@ -5,7 +5,7 @@ import java.util.Random;
 import main.MCTS;
 import main.Move;
 
-public class TMain {
+public class TTFEMain {
 
 	public static void main(String[] args) {
 		TTFE b = new TTFE(4);

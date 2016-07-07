@@ -13,7 +13,7 @@ import java.util.Scanner;
 import main.MCTS;
 import main.Move;
 
-public class Main {
+public class C4Main {
 	static int scorePlayer0 = 0;
 	static int scorePlayer1 = 0;
 	static int draws = 0;	
@@ -97,7 +97,7 @@ public class Main {
 	}
 
 	public static void main(String[] args) {		
-		run(100, 10000, 3.0, false, 0, 0);
+		run(100, 300000, 1.4d, false, 0, 0);
 		//run(100, 25000, 3.0, false, 0, 0);
 		//run(100, 50000, 3.0, false, 0, 0);
 		//run(100, 75000, 3.0, false, 0, 0);

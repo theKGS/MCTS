@@ -169,7 +169,7 @@ public class ConnectFour implements Board {
 		double[] optimistic = new double[2];
 
 		if (winner >= 0){
-			optimistic[winner] = 1;		
+			optimistic[winner] = 1.0d;		
 		} else { // draw
 			optimistic[0] = 0.5;
 			optimistic[1] = 0.5;			
@@ -183,10 +183,10 @@ public class ConnectFour implements Board {
 	public double[] getScore() {
 		double[] score = new double[2];
 		if (winner >= 0)
-			score[winner] = 1;
+			score[winner] = 1.0d;
 		else if (draw){
-			score[0] = 0.5;
-			score[1] = 0.5;
+			score[0] = 0.5d;
+			score[1] = 0.5d;
 		}
 
 		return score;
