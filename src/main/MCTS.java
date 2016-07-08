@@ -21,21 +21,21 @@ public class MCTS {
 	/**
 	 * Run a UCT-MCTS simulation for a number of iterations.
 	 * 
-	 * @param s starting board
+	 * @param startingBoard starting board
 	 * @param runs how many iterations to think
 	 * @param bounds enable or disable score bounds.
 	 * @return
 	 */
-	public Move runMCTS(Board s, int runs, boolean bounds) {
+	public Move runMCTS(Board startingBoard, int runs, boolean bounds) {
 		scoreBounds = bounds;
-		rootNode = new Node(s);
+		rootNode = new Node(startingBoard);
 
 		System.out.println("Making choice for player: " + rootNode.player);
 		
 		long startTime = System.nanoTime();
 
 		for (int i = 0; i < runs; i++) {
-			select(s.duplicate(), rootNode);
+			select(startingBoard.duplicate(), rootNode);
 		}
 
 		long endTime = System.nanoTime();

@@ -113,8 +113,8 @@ public class Node {
 						+ optimisticBias * s.opti[player]
 						+ pessimisticBias * s.pess[player];
 
-				// If we found a better node
 				if (tempBest > bestValue) {
+					// If we found a better node
 					bestNodes.clear();
 					bestNodes.add(s);
 					bestValue = tempBest;
