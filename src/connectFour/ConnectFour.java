@@ -7,9 +7,9 @@ import main.Move;
 
 public class ConnectFour implements Board {
 
-	public int[][] board;
+	public int[][] board; // The actual game board data
 	public int currentPlayer = 0;
-	public int freeSlots[];
+	public int freeSlots[]; // The number of free slots per column
 	public int totalFreeSlots = 6 * 7;
 	public int winner = -1;
 	public boolean draw = false;
@@ -25,12 +25,11 @@ public class ConnectFour implements Board {
 	@Override
 	public Board duplicate(){
 	
+		// Copy board data
 		ConnectFour newBoard = new ConnectFour();
 		for (int x = 0; x < 7; x++){
 			for (int y = 0; y < 6; y++){
-				for (int z = 0; z < 2; z++){
-					newBoard.board[x][y] = board[x][y];
-				}	
+				newBoard.board[x][y] = board[x][y];
 			}				
 		}
 		newBoard.currentPlayer = this.currentPlayer;
@@ -55,7 +54,9 @@ public class ConnectFour implements Board {
 		return moves;
 	}
 
-	// Return true if last move won the game for that player
+	/*
+	 * Return true if last move won the game for that player
+	 */
 	private boolean thisMoveWonTheGame(int x, int y, int pl){
 		int horizontal = 1;
 		int vertical = 1;
@@ -74,6 +75,10 @@ public class ConnectFour implements Board {
 				risingDiagonal >= 4 || sinkingDiagonal >= 4);
 	}
 	
+	/*
+	 * Return the number of pieces extending from position x, y in the
+	 * direction of xf, yf. Think of the latter as a direction vector.
+	 */
 	private int scanLine(int x, int y, int xf, int yf, int playerID){
 		int sum = 0;
 		for (int i = 1; i < 4; i++){
@@ -162,16 +167,16 @@ public class ConnectFour implements Board {
 		return score;
 	}
 
-	// This is not used by connectFour, but it
-	// must be implemented anyway.
-	@Override
+	/*
+	 * This method is not used by this game, but at least
+	 * a function body is required to fulfill the Board
+	 * interface contract. 
+	 */
 	public double[] getMoveWeights() {
 		return null;
 	}
 
 	@Override
 	public void bPrint() {
-		// TODO Auto-generated method stub
-		
 	}
 }

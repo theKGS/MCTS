@@ -110,8 +110,8 @@ public class Node {
 			// propagation mode is enabled.
 			if (s.pruned == false) {
 				final double tempBest = s.upperConfidenceBound(explorationConstant)
-						+ optimisticBias * s.opti[player]
-						+ pessimisticBias * s.pess[player];
+						/*+ optimisticBias * s.opti[player]
+						+ pessimisticBias * s.pess[player]*/;
 
 				if (tempBest > bestValue) {
 					// If we found a better node

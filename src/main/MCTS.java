@@ -50,7 +50,7 @@ public class MCTS {
 	/**
 	 * This represents the select stage, or default policy, of the algorithm.
 	 * Traverse down to the bottom of the tree using the selection strategy
-	 * until you find an unexpanded child node. Expand it. Run a random playout
+	 * until you find an unexpanded child node. Expand it. Run a random playout.
 	 * Backpropagate results of the playout.
 	 * 
 	 * @param node
