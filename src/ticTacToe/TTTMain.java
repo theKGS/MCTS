@@ -10,7 +10,7 @@ public class TTTMain {
 
 	public static void main(String[] args) {
 		MCTS mcts = new MCTS();
-		mcts.setExplorationConstant(1.4);
+		mcts.setExplorationConstant(0.2);
 		Move move;
 		mcts.setOptimisticBias(0);
 		mcts.setPessimisticBias(0);
@@ -19,7 +19,7 @@ public class TTTMain {
 		for (int i = 0; i < 100; i ++) {
 			TicTacToe ttt = new TicTacToe();
 			while (!ttt.gameOver()){
-				move = mcts.runMCTS(ttt, 2000, false);
+				move = mcts.runMCTS(ttt, 500000, false);
 				ttt.makeMove(move);
 			}
 			

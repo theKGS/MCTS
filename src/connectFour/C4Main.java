@@ -37,24 +37,24 @@ public class C4Main {
 		Scanner readline = new Scanner(System.in);
 
 		for (int i = 0; i < games; i++) {
-			ConnectFour cf = new ConnectFour();
+			ConnectFour gameInstance = new ConnectFour();
 			while (true) {
-				cf.print();
+				//cf.print();
 
-				if (cf.currentPlayer != activePlayerID || !playerControl) {
-					Move m = player.runMCTS(cf, it, bounds);
-					cf.makeMove(m);
+				if (gameInstance.currentPlayer != activePlayerID || !playerControl) {
+					Move m = player.runMCTS(gameInstance, it, bounds);
+					gameInstance.makeMove(m);
 				} else {
 					System.out.println("Enter a row: ");
 					int n = readline.nextInt();
 					Move m = new ConnectFourMove(n);
-					cf.makeMove(m);	
+					gameInstance.makeMove(m);	
 				}
 				
 				//cf.print();
 								
-				if (cf.gameOver()) {
-					scr = cf.getScore();
+				if (gameInstance.gameOver()) {
+					scr = gameInstance.getScore();
 					if (scr[0] > 0.8) {
 						scorePlayer0++;
 					} else if (scr[1] > 0.8) {
@@ -63,7 +63,7 @@ public class C4Main {
 						draws ++;
 					}
 
-					cf.print();
+					gameInstance.print();
 					System.out.println("Score Vector: " + Arrays.toString(scr));
 					System.out.println(i + ": Scores: " + scorePlayer0 + " / " + scorePlayer1 + " Draws: " + draws);
 					break;
@@ -97,9 +97,9 @@ public class C4Main {
 	}
 
 	public static void main(String[] args) {		
-		run(100, 50000, 6.0d, false, 0, 0);
-		//run(100, 25000, 3.0, false, 0, 0);
-		//run(100, 50000, 3.0, false, 0, 0);
+		run(100, 50000, 1.4d, false, 0, 0);
+		run(100, 50000, 1.5d, false, 0, 0);
+		run(100, 50000, 1.3d, false, 0, 0);
 		//run(100, 75000, 3.0, false, 0, 0);
 		//run(100, 100000, 3.0, false, 0, 0);
 		//run(100, 150000, 3.0, false, 0, 0);

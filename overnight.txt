@@ -1,3 +1,7 @@
+//// OLD AND OUTDATED ////
+Observe that the player IDs are switched around
+in this first version. This was fixed in a later version.
+
 Iterations: 10000 Exp. Con.: 1.414, Bounds = false
 pessBias: 0.0 optiBias: 0.0
 Score for this run: 40 / 58
@@ -26,7 +30,7 @@ Iterations: 300000 Exp. Con.: 1.414, Bounds = false
 pessBias: 0.0 optiBias: 0.0
 Score for this run: 100 / 0
 
-//// NEW VERSION BELOW ////
+//// NEW VERSION RUNS BELOW ////
 
 Iterations: 5000 Exp. Con.: 1.4, Bounds = false
 pessBias: 0.0 optiBias: 0.0
@@ -40,15 +44,26 @@ Iterations: 25000 Exp. Con.: 1.4, Bounds = false
 pessBias: 0.0 optiBias: 0.0
 Score for this run: 75 / 22 Draws: 3
 
-Iterations: 50000 Exp. Con.: 1.4
-pessBias: 0.0 optiBias: 0.0
-Score for this run: 73 / 12 Draws: 15
-Iterations: 50000 Exp. Con.: 3.0, Bounds = false
-pessBias: 0.0 optiBias: 0.0
-Score for this run: 73 / 27 Draws: 0
 Iterations: 50000 Exp. Con.: 0.8, Bounds = false
-pessBias: 0.0 optiBias: 0.0
 Score for this run: 48 / 47 Draws: 5
+Iterations: 50000 Exp. Con.: 1.0, Bounds = false
+Score for this run: 58 / 37 Draws: 5
+Iterations: 50000 Exp. Con.: 1.2, Bounds = false
+Score for this run: 82 / 16 Draws: 2
+Iterations: 50000 Exp. Con.: 1.3, Bounds = false
+Score for this run: 86 / 11 Draws: 3
+Iterations: 50000 Exp. Con.: 1.4, Bounds = false
+Score for this run: 73 / 12 Draws: 15
+Iterations: 50000 Exp. Con.: 1.4, Bounds = false
+Score for this run: 87 / 3 Draws: 10
+Iterations: 50000 Exp. Con.: 1.5, Bounds = false
+Score for this run: 98 / 2 Draws: 0
+Iterations: 50000 Exp. Con.: 1.6, Bounds = false
+Score for this run: 89 / 10 Draws: 1
+Iterations: 50000 Exp. Con.: 2.0, Bounds = false
+Score for this run: 68 / 26 Draws: 6
+Iterations: 50000 Exp. Con.: 3.0, Bounds = false
+Score for this run: 73 / 27 Draws: 0
 
 Iterations: 200000 Exp. Con.: 1.4, Bounds = false
 pessBias: 0.0 optiBias: 0.0
