@@ -197,33 +197,38 @@ public class MCTS {
 				 * roll. We must consider the random weights
 				 * of the moves. 
 				 */
-				double []weights = brd.getMoveWeights();
 				
-				double totalWeight = 0.0d;
-				for (int i = 0; i < weights.length; i++)
-				{
-				    totalWeight += weights[i];
-				}
-				
-				int randomIndex = -1;
-				double random = Math.random() * totalWeight;
-				for (int i = 0; i < weights.length; ++i)
-				{
-				    random -= weights[i];
-				    if (random <= 0.0d)
-				    {
-				        randomIndex = i;
-				        break;
-				    }
-				}
-				
-				mv = moves.get(randomIndex);
+				mv = getRandom(brd, moves);
 			}
 									
 			brd.makeMove(mv);
 		}
 	}
 
+	private Move getRandom(Board board, ArrayList<Move> moves) {
+		double []weights = board.getMoveWeights();
+		
+		double totalWeight = 0.0d;
+		for (int i = 0; i < weights.length; i++)
+		{
+		    totalWeight += weights[i];
+		}
+		
+		int randomIndex = -1;
+		double random = Math.random() * totalWeight;
+		for (int i = 0; i < weights.length; ++i)
+		{
+		    random -= weights[i];
+		    if (random <= 0.0d)
+		    {
+		        randomIndex = i;
+		        break;
+		    }
+		}
+		
+		return moves.get(randomIndex);
+	}
+	
 	/**
 	 * Sets the exploration constant for the algorithm. You will need to find
 	 * the optimal value through testing. This can have a big impact on
