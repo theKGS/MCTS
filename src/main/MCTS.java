@@ -128,6 +128,10 @@ public class MCTS {
 		}
 	}
 
+	public void select2(){
+		
+	}
+	
 	/**
 	 * This is the final step of the algorithm, to pick the best move to
 	 * actually make.
