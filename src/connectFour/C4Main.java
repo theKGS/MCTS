@@ -97,9 +97,9 @@ public class C4Main {
 	}
 
 	public static void main(String[] args) {		
-		run(100, 50000, 1.4d, false, 0, 0);
-		run(100, 50000, 1.5d, false, 0, 0);
-		run(100, 50000, 1.3d, false, 0, 0);
+		run(100, 50000, 1.35d, false, 0, 0);
+		run(100, 50000, 1.45d, false, 0, 0);
+		//run(100, 50000, 1.3d, false, 0, 0);
 		//run(100, 75000, 3.0, false, 0, 0);
 		//run(100, 100000, 3.0, false, 0, 0);
 		//run(100, 150000, 3.0, false, 0, 0);
