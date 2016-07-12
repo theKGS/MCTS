@@ -198,14 +198,14 @@ public class MCTS {
 				 * of the moves. 
 				 */
 				
-				mv = getRandom(brd, moves);
+				mv = getRandomMove(brd, moves);
 			}
 									
 			brd.makeMove(mv);
 		}
 	}
 
-	private Move getRandom(Board board, ArrayList<Move> moves) {
+	private Move getRandomMove(Board board, ArrayList<Move> moves) {
 		double []weights = board.getMoveWeights();
 		
 		double totalWeight = 0.0d;
