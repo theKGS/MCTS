@@ -67,10 +67,7 @@ public class MCTS {
 	}
 	
 	private Map.Entry<Board, Node> treePolicy(Board b, Node node) {
-		while(true) {
-			if (b.gameOver()) {
-				return new AbstractMap.SimpleEntry<>(b, node);
-			} else {
+		while(!b.gameOver()) {
 				if (node.unvisitedChildren == null) {
 					node.expandNode(b); 
 				}
@@ -86,8 +83,9 @@ public class MCTS {
 					node = finalNode;
 					b.makeMove(finalNode.move);
 				}
-			}
 		}
+		
+		return new AbstractMap.SimpleEntry<>(b, node);
 	}
 	
 	
@@ -108,9 +106,6 @@ public class MCTS {
 			tempBest = s.games;
 			tempBest += s.opti[n.player] * optimisticBias;
 			tempBest += s.pess[n.player] * pessimisticBias;
-			// tempBest += 1.0 / Math.sqrt(s.games);
-			//tempBest = Math.min(tempBest, s.opti[n.player]);
-			//tempBest = Math.max(tempBest, s.pess[n.player]);
 			if (tempBest > bestValue) {
 				bestNodes.clear();
 				bestNodes.add(s);
@@ -122,8 +117,6 @@ public class MCTS {
 
 		Node finalNode = bestNodes.get(random.nextInt(bestNodes.size()));
 		
-		//System.out.println("Highest value: " + bestValue + ", O/P Bounds: "
-		//		+ finalNode.opti[n.player] + ", " + finalNode.pess[n.player]);
 		return finalNode.move;
 	}
 
