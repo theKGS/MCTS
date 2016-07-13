@@ -60,7 +60,7 @@ public class MCTS {
 	 * @param brd
 	 * 			  Board state to work from.
 	 */
-	private void select(Board currentBoard, Node currentNode) {
+	private void _select(Board currentBoard, Node currentNode) {
 		while (true) {
 			// Break procedure if end of tree
 			if (currentBoard.gameOver()) {
@@ -127,10 +127,48 @@ public class MCTS {
 			}
 		}
 	}
-
-	public void select2(){
-		
+	
+	/**
+	 * This represents the select stage, or default policy, of the algorithm.
+	 * Traverse down to the bottom of the tree using the selection strategy
+	 * until you find an unexpanded child node. Expand it. Run a random playout.
+	 * Backpropagate results of the playout.
+	 * 
+	 * @param node
+	 *            Node from which to start selection
+	 * @param brd
+	 * 			  Board state to work from.
+	 */
+	private void select(Board currentBoard, Node currentNode){
+		Map.Entry<Board, Node> tuple = treePolicy(currentBoard, currentNode);
+		double[] score = playout(tuple.getValue(), tuple.getKey());
+		tuple.getValue().backPropagateScore(score);
 	}
+	
+	private Map.Entry<Board, Node> treePolicy(Board b, Node node) {
+		while(true) {
+			if (b.gameOver()) {
+				return new AbstractMap.SimpleEntry<>(b, node);
+			} else {
+				if (node.unvisitedChildren == null) {
+					node.expandNode(b); 
+				}
+				
+				if (!node.unvisitedChildren.isEmpty()) {
+					Node temp = node.unvisitedChildren.remove(random.nextInt(node.unvisitedChildren.size()));
+					node.children.add(temp);
+					b.makeMove(temp.move);
+					return new AbstractMap.SimpleEntry<>(b, temp);
+				} else {
+					ArrayList<Node> bestNodes = node.select(optimisticBias, pessimisticBias, explorationConstant);
+					Node finalNode = bestNodes.get(random.nextInt(bestNodes.size()));
+					node = finalNode;
+					b.makeMove(finalNode.move);
+				}
+			}
+		}
+	}
+	
 	
 	/**
 	 * This is the final step of the algorithm, to pick the best move to
@@ -174,18 +212,13 @@ public class MCTS {
 	 * @param state
 	 * @return
 	 */
-	private void playout(Node state, Board board) {
+	private double[] playout(Node state, Board board) {
 		ArrayList<Move> moves;
 		Move mv;
 		Board brd = board.duplicate();
 
 		// Start playing random moves until the game is over
-		while (true) {
-			if (brd.gameOver()) {
-				state.backPropagateScore(brd.getScore());
-				return;
-			}
-
+		while (!brd.gameOver()) {
 			moves = brd.getMoves();
 			if (brd.getCurrentPlayer() >= 0) {
 				// make random selection normally
@@ -203,6 +236,8 @@ public class MCTS {
 									
 			brd.makeMove(mv);
 		}
+		
+		return brd.getScore();
 	}
 
 	private Move getRandomMove(Board board, ArrayList<Move> moves) {
