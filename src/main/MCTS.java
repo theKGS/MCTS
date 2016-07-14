@@ -2,7 +2,6 @@ package main;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Random;
 
@@ -32,8 +31,6 @@ public class MCTS {
 		scoreBounds = bounds;
 		rootNode = new Node(startingBoard);
 
-		System.out.println("Making choice for player: " + rootNode.player);
-		
 		long startTime = System.nanoTime();
 
 		for (int i = 0; i < runs; i++) {
@@ -42,11 +39,12 @@ public class MCTS {
 
 		long endTime = System.nanoTime();
 
-		if (this.trackTime)
-			System.out.println("Thinking time per move in milliseconds: "
-					+ (endTime - startTime) / 1000000);
+		if (this.trackTime) {
+			System.out.println("Making choice for player: " + rootNode.player);
+			System.out.println("Thinking time per move in milliseconds: " + (endTime - startTime) / 1000000);
+		}
 
-		return finalSelect(rootNode);
+		return finalMoveSelection(rootNode);
 	}
 	
 	/**
@@ -61,9 +59,9 @@ public class MCTS {
 	 * 			  Board state to work from.
 	 */
 	private void select(Board currentBoard, Node currentNode){
-		Map.Entry<Board, Node> tuple = treePolicy(currentBoard, currentNode);
-		double[] score = playout(tuple.getValue(), tuple.getKey());
-		tuple.getValue().backPropagateScore(score);
+		Map.Entry<Board, Node> boardNodePair = treePolicy(currentBoard, currentNode);
+		double[] score = playout(boardNodePair.getValue(), boardNodePair.getKey());
+		boardNodePair.getValue().backPropagateScore(score);
 	}
 	
 	private Map.Entry<Board, Node> treePolicy(Board b, Node node) {
@@ -97,7 +95,7 @@ public class MCTS {
 	 *            this is the node whose children are considered
 	 * @return the best Move the algorithm can find
 	 */
-	private Move finalSelect(Node n) {
+	private Move finalMoveSelection(Node n) {
 		double bestValue = Double.NEGATIVE_INFINITY;
 		double tempBest;
 		ArrayList<Node> bestNodes = new ArrayList<Node>();
