@@ -3,6 +3,7 @@ package ticTacToe;
 
 import java.util.Arrays;
 
+import main.FinalSelectionPolicy;
 import main.MCTS;
 import main.Move;
 
@@ -11,15 +12,17 @@ public class TTTMain {
 	public static void main(String[] args) {
 		MCTS mcts = new MCTS();
 		mcts.setExplorationConstant(0.2);
+		mcts.setTimeDisplay(true);
 		Move move;
-		mcts.setOptimisticBias(0);
-		mcts.setPessimisticBias(0);
+		mcts.setOptimisticBias(0.0d);
+		mcts.setPessimisticBias(0.0d);
+		mcts.setMoveSelectionPolicy(FinalSelectionPolicy.robustChild);
 		int []scores = new int[3];
 		
 		for (int i = 0; i < 100; i ++) {
 			TicTacToe ttt = new TicTacToe();
 			while (!ttt.gameOver()){
-				move = mcts.runMCTS(ttt, 4000, false);
+				move = mcts.runMCTS(ttt, 8000, false);
 				ttt.makeMove(move);
 			}
 			

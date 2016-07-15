@@ -14,6 +14,7 @@ public class MCTS {
 
 	private boolean scoreBounds;
 	private boolean trackTime; // display thinking time used
+	private FinalSelectionPolicy finalSelectionPolicy;
 
 	public MCTS() {
 		random = new Random();
@@ -59,9 +60,20 @@ public class MCTS {
 	 * 			  Board state to work from.
 	 */
 	private void select(Board currentBoard, Node currentNode){
+		// Begin tree policy. Traverse down the tree and expand. Return
+		// the new node or the deepest node it could reach. Return too
+		// a board matching the returned node.
 		Map.Entry<Board, Node> boardNodePair = treePolicy(currentBoard, currentNode);
+		
+		// Run a random playout until the end of the game.
 		double[] score = playout(boardNodePair.getValue(), boardNodePair.getKey());
-		boardNodePair.getValue().backPropagateScore(score);
+		
+		// Backpropagate results of playout.
+		Node n = boardNodePair.getValue();
+		n.backPropagateScore(score);
+		if (scoreBounds) {
+			n.backPropagateBounds(score);
+		}
 	}
 	
 	private Map.Entry<Board, Node> treePolicy(Board b, Node node) {
@@ -77,6 +89,15 @@ public class MCTS {
 					return new AbstractMap.SimpleEntry<>(b, temp);
 				} else {
 					ArrayList<Node> bestNodes = node.select(optimisticBias, pessimisticBias, explorationConstant);
+					
+					if (bestNodes.size() == 0){
+						// We have failed to find a single child to visit
+						// from a non-terminal node, so we conclude that
+						// all children must have been PRUNED, and that 
+						// therefore there is no reason to continue.
+						return new AbstractMap.SimpleEntry<>(b, node);						
+					}
+					
 					Node finalNode = bestNodes.get(random.nextInt(bestNodes.size()));
 					node = finalNode;
 					b.makeMove(finalNode.move);
@@ -96,14 +117,32 @@ public class MCTS {
 	 * @return the best Move the algorithm can find
 	 */
 	private Move finalMoveSelection(Node n) {
+		Node r = null;
+		
+		switch (finalSelectionPolicy) {
+		case maxChild:
+			r = maxChild(n);
+			break;
+		case robustChild:
+			r = robustChild(n);
+			break;
+		default:
+			r = robustChild(n);
+			break;
+		}
+
+		return r.move;
+	}
+
+	private Node robustChild(Node n){
 		double bestValue = Double.NEGATIVE_INFINITY;
 		double tempBest;
 		ArrayList<Node> bestNodes = new ArrayList<Node>();
 
 		for (Node s : n.children) {
 			tempBest = s.games;
-			tempBest += s.opti[n.player] * optimisticBias;
-			tempBest += s.pess[n.player] * pessimisticBias;
+			//tempBest += s.opti[n.player] * optimisticBias;
+			//tempBest += s.pess[n.player] * pessimisticBias;
 			if (tempBest > bestValue) {
 				bestNodes.clear();
 				bestNodes.add(s);
@@ -114,10 +153,33 @@ public class MCTS {
 		}
 
 		Node finalNode = bestNodes.get(random.nextInt(bestNodes.size()));
-		
-		return finalNode.move;
-	}
 
+		return finalNode;
+	}
+	
+	private Node maxChild(Node n){
+		double bestValue = Double.NEGATIVE_INFINITY;
+		double tempBest;
+		ArrayList<Node> bestNodes = new ArrayList<Node>();
+
+		for (Node s : n.children) {
+			tempBest = s.score[n.player];
+			if (tempBest > bestValue) {
+				bestNodes.clear();
+				bestNodes.add(s);
+				bestValue = tempBest;
+			} else if (tempBest == bestValue) {
+				bestNodes.add(s);
+			}
+		}
+
+		Node finalNode = bestNodes.get(random.nextInt(bestNodes.size()));
+
+		return finalNode;
+	}
+	
+	
+	
 	/**
 	 * Playout function for MCTS
 	 * 
@@ -187,6 +249,10 @@ public class MCTS {
 		explorationConstant = exp;
 	}
 
+	public void setMoveSelectionPolicy(FinalSelectionPolicy policy){
+		finalSelectionPolicy = policy;
+	}
+	
 	/**
 	 * This is multiplied by the pessimistic bounds of any
 	 * considered move during selection.	 
