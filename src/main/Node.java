@@ -94,41 +94,6 @@ public class Node {
 	}
 
 	/**
-	 * Produce a list of viable nodes to visit. The actual 
-	 * selection is done in runMCTS
-	 * @param optimisticBias
-	 * @param pessimisticBias
-	 * @param explorationConstant
-	 * @return
-	 */
-	public ArrayList<Node> select(double optimisticBias, double pessimisticBias, double explorationConstant){
-		double bestValue = Double.NEGATIVE_INFINITY;
-		ArrayList<Node> bestNodes = new ArrayList<Node>();
-		for (Node s : children) {
-			// Pruned is only ever true if a branch has been pruned 
-			// from the tree and that can only happen if bounds 
-			// propagation mode is enabled.
-			if (s.pruned == false) {
-				final double tempBest = s.upperConfidenceBound(explorationConstant)
-						+optimisticBias * s.opti[player]
-						+pessimisticBias * s.pess[player];
-
-				if (tempBest > bestValue) {
-					// If we found a better node
-					bestNodes.clear();
-					bestNodes.add(s);
-					bestValue = tempBest;
-				} else if (tempBest == bestValue) {
-					// If we found an equal node
-					bestNodes.add(s);
-				}
-			}
-		}
-		
-		return bestNodes;
-	}
-	
-	/**
 	 * Set the bounds in the given node and propagate the values 
 	 * back up the tree. When bounds are first created they are
 	 * both equivalent to a player's score.

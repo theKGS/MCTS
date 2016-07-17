@@ -16,6 +16,8 @@ public class MCTS {
 	private boolean trackTime; // display thinking time used
 	private FinalSelectionPolicy finalSelectionPolicy;
 
+	private HeuristicFunction heuristic;
+	
 	public MCTS() {
 		random = new Random();
 	}
@@ -88,7 +90,7 @@ public class MCTS {
 					b.makeMove(temp.move);
 					return new AbstractMap.SimpleEntry<>(b, temp);
 				} else {
-					ArrayList<Node> bestNodes = node.select(optimisticBias, pessimisticBias, explorationConstant);
+					ArrayList<Node> bestNodes = findChildren(node, b, optimisticBias, pessimisticBias, explorationConstant);
 					
 					if (bestNodes.size() == 0){
 						// We have failed to find a single child to visit
@@ -134,6 +136,11 @@ public class MCTS {
 		return r.move;
 	}
 
+	/**
+	 * Select the most visited child node
+	 * @param n
+	 * @return
+	 */
 	private Node robustChild(Node n){
 		double bestValue = Double.NEGATIVE_INFINITY;
 		double tempBest;
@@ -157,6 +164,11 @@ public class MCTS {
 		return finalNode;
 	}
 	
+	/**
+	 * Select the child node with the highest score
+	 * @param n
+	 * @return
+	 */
 	private Node maxChild(Node n){
 		double bestValue = Double.NEGATIVE_INFINITY;
 		double tempBest;
@@ -239,6 +251,45 @@ public class MCTS {
 	}
 	
 	/**
+	 * Produce a list of viable nodes to visit. The actual 
+	 * selection is done in runMCTS
+	 * @param optimisticBias
+	 * @param pessimisticBias
+	 * @param explorationConstant
+	 * @return
+	 */
+	public ArrayList<Node> findChildren(Node n, Board b, double optimisticBias, double pessimisticBias, double explorationConstant){
+		double bestValue = Double.NEGATIVE_INFINITY;
+		ArrayList<Node> bestNodes = new ArrayList<Node>();
+		for (Node s : n.children) {
+			// Pruned is only ever true if a branch has been pruned 
+			// from the tree and that can only happen if bounds 
+			// propagation mode is enabled.
+			if (s.pruned == false) {
+				double tempBest = s.upperConfidenceBound(explorationConstant)
+						+optimisticBias * s.opti[n.player]
+						+pessimisticBias * s.pess[n.player];
+
+				if (heuristic != null){
+					tempBest += heuristic.h(b);
+				}
+				
+				if (tempBest > bestValue) {
+					// If we found a better node
+					bestNodes.clear();
+					bestNodes.add(s);
+					bestValue = tempBest;
+				} else if (tempBest == bestValue) {
+					// If we found an equal node
+					bestNodes.add(s);
+				}
+			}
+		}
+		
+		return bestNodes;
+	}	
+	
+	/**
 	 * Sets the exploration constant for the algorithm. You will need to find
 	 * the optimal value through testing. This can have a big impact on
 	 * performance. Default value is sqrt(2)
@@ -251,6 +302,10 @@ public class MCTS {
 
 	public void setMoveSelectionPolicy(FinalSelectionPolicy policy){
 		finalSelectionPolicy = policy;
+	}
+	
+	public void setHeuristicFunction(HeuristicFunction h){
+		heuristic = h;
 	}
 	
 	/**
