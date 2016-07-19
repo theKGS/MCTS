@@ -3,6 +3,7 @@ package connectFour;
 import java.util.ArrayList;
 
 import main.Board;
+import main.CallLocation;
 import main.Move;
 
 public class ConnectFour implements Board {
@@ -42,7 +43,7 @@ public class ConnectFour implements Board {
 	}
 	
 	@Override
-	public ArrayList<Move> getMoves() {
+	public ArrayList<Move> getMoves(CallLocation location) {
 		ArrayList<Move> moves = new ArrayList<Move>();
 		for (int i = 0; i < 7; i++){
 			if (freeSlots[i] > 0){

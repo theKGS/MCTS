@@ -3,6 +3,7 @@ package ticTacToe;
 import java.util.ArrayList;
 
 import main.Board;
+import main.CallLocation;
 import main.Move;
 
 public class TicTacToe implements Board {
@@ -42,7 +43,7 @@ public class TicTacToe implements Board {
 	}
 	
 	@Override
-	public ArrayList<Move> getMoves() {
+	public ArrayList<Move> getMoves(CallLocation location) {
 		ArrayList<Move> moves = new ArrayList<Move>();
 		for (int x = 0; x < 3; x++){
 			for (int y = 0; y < 3; y++){

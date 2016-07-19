@@ -19,7 +19,7 @@ public interface Board {
 	 * 
 	 * @return
 	 */
-	public ArrayList<Move> getMoves();
+	public ArrayList<Move> getMoves(CallLocation location);
 
 	/**
 	 * Apply the move m to the current state of the board.

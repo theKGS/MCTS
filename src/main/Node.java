@@ -85,7 +85,7 @@ public class Node {
 	 * @param currentBoard
 	 */
 	public void expandNode(Board currentBoard){
-		ArrayList<Move> legalMoves = currentBoard.getMoves();
+		ArrayList<Move> legalMoves = currentBoard.getMoves(CallLocation.treePolicy);
 		unvisitedChildren = new ArrayList<Node>();
 		for (int i = 0; i < legalMoves.size(); i++) {
 			Node tempState = new Node(currentBoard, legalMoves.get(i), this);

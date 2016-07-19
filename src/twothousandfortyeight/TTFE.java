@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import main.Board;
+import main.CallLocation;
 import main.Move;
 
 public class TTFE implements Board {
@@ -37,7 +38,7 @@ public class TTFE implements Board {
 	}
 
 	@Override
-	public ArrayList<Move> getMoves() {
+	public ArrayList<Move> getMoves(CallLocation location) {
 		ArrayList<Move> out = new ArrayList<Move>();
 		if (currentPlayer == 0){
 			// It's the player's turn
