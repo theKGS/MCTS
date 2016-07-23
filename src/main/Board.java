@@ -17,6 +17,10 @@ public interface Board {
 	 * Get a list of all available moves for the current state. MCTS
 	 * calls this to know what actions are possible at that point.
 	 * 
+	 * The location parameter indicates from where in the algorithm
+	 * the method was called. Can be either treePolicy or playout.
+	 * 
+	 * @param location
 	 * @return
 	 */
 	public ArrayList<Move> getMoves(CallLocation location);
