@@ -1,8 +1,6 @@
 package main;
 
-import java.util.AbstractMap;
 import java.util.ArrayList;
-import java.util.Map;
 import java.util.Random;
 
 public class MCTS {
@@ -65,20 +63,23 @@ public class MCTS {
 		// Begin tree policy. Traverse down the tree and expand. Return
 		// the new node or the deepest node it could reach. Return too
 		// a board matching the returned node.
-		Map.Entry<Board, Node> boardNodePair = treePolicy(currentBoard, currentNode);
+		BoardNodePair data = treePolicy(currentBoard, currentNode);
 		
 		// Run a random playout until the end of the game.
-		double[] score = playout(boardNodePair.getValue(), boardNodePair.getKey());
+		double[] score = playout(data.getNode(), data.getBoard());
 		
 		// Backpropagate results of playout.
-		Node n = boardNodePair.getValue();
+		Node n = data.getNode();
 		n.backPropagateScore(score);
 		if (scoreBounds) {
 			n.backPropagateBounds(score);
 		}
 	}
 	
-	private Map.Entry<Board, Node> treePolicy(Board b, Node node) {
+	/*
+	 *  
+	 */
+	private BoardNodePair treePolicy(Board b, Node node) {
 		while(!b.gameOver()) {
 				if (node.unvisitedChildren == null) {
 					node.expandNode(b); 
@@ -88,16 +89,16 @@ public class MCTS {
 					Node temp = node.unvisitedChildren.remove(random.nextInt(node.unvisitedChildren.size()));
 					node.children.add(temp);
 					b.makeMove(temp.move);
-					return new AbstractMap.SimpleEntry<>(b, temp);
+					return new BoardNodePair(b, temp);
 				} else {
 					ArrayList<Node> bestNodes = findChildren(node, b, optimisticBias, pessimisticBias, explorationConstant);
 					
 					if (bestNodes.size() == 0){
 						// We have failed to find a single child to visit
 						// from a non-terminal node, so we conclude that
-						// all children must have been PRUNED, and that 
+						// all children must have been pruned, and that 
 						// therefore there is no reason to continue.
-						return new AbstractMap.SimpleEntry<>(b, node);						
+						return new BoardNodePair(b, node);						
 					}
 					
 					Node finalNode = bestNodes.get(random.nextInt(bestNodes.size()));
@@ -106,7 +107,7 @@ public class MCTS {
 				}
 		}
 		
-		return new AbstractMap.SimpleEntry<>(b, node);
+		return new BoardNodePair(b, node);
 	}
 	
 	

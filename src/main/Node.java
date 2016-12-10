@@ -156,7 +156,7 @@ public class Node {
 			parent.backPropagateBoundsHelper();
 	}
 
-	public void pruneBranches() {
+	private void pruneBranches() {
 		for (Node s : children) {
 			if (pess[player] >= s.opti[player]) {
 				s.pruned = true;
