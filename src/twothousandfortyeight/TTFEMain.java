@@ -24,7 +24,7 @@ public class TTFEMain {
 		
 		while (!b.gameOver()){
 			if (b.currentPlayer == 0) {
-				move = mcts.runMCTS(b, 600, false);
+				move = mcts.runMCTS(b, 10000, false);
 				b.makeMove(move);
 				System.out.println("---");
 				for (int y = 0; y < 4; y++) {
@@ -40,6 +40,14 @@ public class TTFEMain {
 			}
 		}
 		
+		System.out.println("---");
+		for (int y = 0; y < 4; y++) {			
+			for (int x = 0; x < 4; x++) {
+				System.out.print(b.board[x][y] + " ");
+			}
+			System.out.println("");
+		}
+
 		System.out.println("Total # moves: " + b.turns);
 	}
 }

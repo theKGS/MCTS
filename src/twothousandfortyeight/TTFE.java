@@ -14,6 +14,8 @@ public class TTFE implements Board {
 	int scoremax;
 	int turns;
 	
+	final static int TARGET = 8;
+	
 	public TTFE(int s) {
 		size = s;
 		turns = 0;
@@ -42,10 +44,17 @@ public class TTFE implements Board {
 		ArrayList<Move> out = new ArrayList<Move>();
 		if (currentPlayer == 0){
 			// It's the player's turn
-			out.add(new TTFEMove(Direction.Up));
-			out.add(new TTFEMove(Direction.Down));
-			out.add(new TTFEMove(Direction.Left));
-			out.add(new TTFEMove(Direction.Right));
+			
+			if (movesLeftVertically()){
+				out.add(new TTFEMove(Direction.Up));
+				out.add(new TTFEMove(Direction.Down));
+			}
+			
+			if (movesLeftHorizontally()){
+				out.add(new TTFEMove(Direction.Left));
+				out.add(new TTFEMove(Direction.Right));
+			}
+			
 		} else {
 			// It's chance's turn
 			for (int x = 0; x < size; x++){
@@ -221,7 +230,7 @@ public class TTFE implements Board {
 			}		
 		}
 
-		return freeSlots == 0 || scoremax == 9;
+		return scoremax == TARGET || (!movesLeftVertically() && !movesLeftHorizontally());
 	}
 
 	@Override
@@ -237,7 +246,7 @@ public class TTFE implements Board {
 	@Override
 	public double[] getScore() {
 		double []score = new double[1];
-		if (scoremax == 9)
+		if (scoremax == TARGET)
 			score[0] = 1;
 		else{
 			score[0] = 0;
@@ -271,4 +280,35 @@ public class TTFE implements Board {
 		// TODO Auto-generated method stub
 		
 	}
+	
+	private boolean movesLeftVertically(){
+		for (int x = 0; x < size; x++){
+			int oldval = 0;
+			for (int y = 0; y < size; y++){
+				if (board[x][y] == oldval || board[x][y] == 0) {
+					return true;
+				} else {
+					oldval = board[x][y];
+				}
+	
+			}		
+		}
+		return false;
+	}
+	
+	private boolean movesLeftHorizontally(){
+		for (int y = 0; y < size; y++){
+			int oldval = 0;
+			for (int x = 0; x < size; x++){
+				if (board[x][y] == oldval || board[x][y] == 0) {
+					return true;
+				} else {
+					oldval = board[x][y];
+				}
+	
+			}		
+		}
+		return false;
+	}
+
 }
