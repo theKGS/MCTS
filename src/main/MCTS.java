@@ -13,7 +13,7 @@ public class MCTS {
 
 	private boolean scoreBounds;
 	private boolean trackTime; // display thinking time used
-	private FinalSelectionPolicy finalSelectionPolicy;
+	private FinalSelectionPolicy finalSelectionPolicy = FinalSelectionPolicy.robustChild;
 
 	private HeuristicFunction heuristic;
 	
@@ -110,12 +110,29 @@ public class MCTS {
 				}
 			} else { // this is a random node
 				
+				// Random nodes are special. We must guarantee that
+				// every random node has a fully populated list of
+				// child nodes and that the list of unvisited children
+				// is empty. We start by checking if we have been to
+				// this node before. If we haven't, we must initialise
+				// all of this node's children properly.
 				
+				if (node.unvisitedChildren == null) {
+					node.expandNode(b);
+					
+					for (Node n : node.unvisitedChildren){
+						node.children.add(n);
+					}
+					node.unvisitedChildren.clear();
+				}
 				
+				// The tree policy for random nodes is different. We
+				// ignore selection heuristics and pick one node at
+				// random based on the weight vector.
 				
-				
-				
-				
+				Node selectedNode = node.children.get(node.randomSelect(b));
+				node = selectedNode;
+				b.makeMove(selectedNode.move);
 			}
 		}
 
