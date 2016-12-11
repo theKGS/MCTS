@@ -20,13 +20,21 @@ public class TTFEMain {
 		b.makeMove(move);
 		b.currentPlayer = -1;
 		move = b.makeRandomChoice(random);
-		b.makeMove(move);		
+		b.makeMove(move);	
 		
+		System.out.println("S-----");
+		for (int y = 0; y < 4; y++) {			
+			for (int x = 0; x < 4; x++) {
+				System.out.print(b.board[x][y] + " ");
+			}
+			System.out.println("");
+		}
+
 		while (!b.gameOver()){
 			if (b.currentPlayer == 0) {
-				move = mcts.runMCTS(b, 60000, false);
+				move = mcts.runMCTS(b, 10000, false);
 				b.makeMove(move);
-				System.out.println("---");
+				System.out.println("P-----");
 				for (int y = 0; y < 4; y++) {
 					for (int x = 0; x < 4; x++) {
 						System.out.print(b.board[x][y] + " ");
@@ -37,17 +45,18 @@ public class TTFEMain {
 			} else {
 				move = b.makeRandomChoice(random);
 				b.makeMove(move);
+				
+				System.out.println("R-----");
+				for (int y = 0; y < 4; y++) {
+					for (int x = 0; x < 4; x++) {
+						System.out.print(b.board[x][y] + " ");
+					}
+					System.out.println("");
+				}
+				System.out.println("turns: " + b.turns);
 			}
 		}
 		
-		System.out.println("---");
-		for (int y = 0; y < 4; y++) {			
-			for (int x = 0; x < 4; x++) {
-				System.out.print(b.board[x][y] + " ");
-			}
-			System.out.println("");
-		}
-
-		System.out.println("Total # moves: " + b.turns);
+		System.out.println("Total # moves: " + b.turns + " Score: " + b.score);
 	}
 }

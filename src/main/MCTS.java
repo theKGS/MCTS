@@ -239,19 +239,18 @@ public class MCTS {
 				// make random selection normally
 				mv = moves.get(random.nextInt(moves.size()));
 			} else {
-				/*
-				 * This situation only occurs when a move
-				 * is entirely random, for example a die
-				 * roll. We must consider the random weights
-				 * of the moves. 
-				 */
-				
+
+				// This situation only occurs when a move
+				// is entirely random, for example a die
+				// roll. We must consider the random weights
+				// of the moves.
+
 				mv = getRandomMove(brd, moves);
 			}
-									
+
 			brd.makeMove(mv);
 		}
-		
+
 		return brd.getScore();
 	}
 

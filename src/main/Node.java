@@ -193,7 +193,6 @@ public class Node {
 		    }
 		}
 		
-		//Node rNode = unvisitedChildren.get(randomIndex);
 		return randomIndex;
 	}
 }

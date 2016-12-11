@@ -11,13 +11,15 @@ public class TTFE implements Board {
 	int currentPlayer;
 	public int [][]board;
 	int size;
-	int scoremax;
+	int maxtile;
+	public int score;
 	int turns;
 	
 	public TTFE(int s) {
 		size = s;
 		turns = 0;
-		scoremax = 1;
+		maxtile = 1;
+		score = 0;
 		board = new int[size][size];
 		currentPlayer = 0;
 	}
@@ -26,7 +28,8 @@ public class TTFE implements Board {
 	public Board duplicate() {
 		TTFE n = new TTFE(size);
 		n.turns = turns;
-		n.scoremax = scoremax;
+		n.maxtile = maxtile;
+		n.score = score;
 		n.currentPlayer = this.currentPlayer;
 		for (int x = 0; x < size; x++){
 			for (int y = 0; y < size; y++){
@@ -113,6 +116,7 @@ public class TTFE implements Board {
 			for (int r = 0; r < size - 1; r++) {
 				if (board[i][r] == board[i][r + 1] && board[i][r] > 0){
 					board[i][r]++;
+					score += 2 << board[i][r];  
 					board[i][r + 1] = 0;
 					r++;
 				}
@@ -122,6 +126,8 @@ public class TTFE implements Board {
 				if (board[i][r] == board[i][r - 1] && board[i][r] > 0){
 					board[i][r] = 0;
 					board[i][r - 1]++;
+					score += 2 << board[i][r - 1];  
+
 					r--;
 				}
 			}
@@ -129,6 +135,8 @@ public class TTFE implements Board {
 			for (int r = size - 1; r > 0; r--) {
 				if (board[r][i] == board[r - 1][i] && board[r][i] > 0){
 					board[r][i]++;
+					score += 2 << board[r][i];  
+
 					board[r - 1][i] = 0;
 					r--;
 				}
@@ -137,6 +145,7 @@ public class TTFE implements Board {
 			for (int r = 0; r < size - 1; r++) {
 				if (board[r][i] == board[r + 1][i] && board[r][i] > 0){
 					board[r][i]++;
+					score += 2 << board[r][i];  
 					board[r + 1][i] = 0;
 					r++;
 				}
@@ -217,13 +226,13 @@ public class TTFE implements Board {
 		for (int x = 0; x < size; x++){
 			for (int y = 0; y < size; y++){
 				// Update max score
-				if (board[x][y] > scoremax){
-					scoremax = board[x][y];
+				if (board[x][y] > maxtile){
+					maxtile = board[x][y];
 				}
 			}		
 		}
 
-		return (!movesLeftVertically() && !movesLeftHorizontally());
+		return maxtile == 11 || (!movesLeftVertically() && !movesLeftHorizontally());
 	}
 
 	@Override
@@ -239,13 +248,8 @@ public class TTFE implements Board {
 	@Override
 	public double[] getScore() {
 		double []score = new double[1];
-		/*if (scoremax == TARGET)
-			score[0] = 1;
-		else{
-			score[0] = 0;
-		} */
 		
-		score[0] = scoremax / 10.0d;
+		score[0] = this.score / 30000.0d;
 		
 		return score;
 	}
