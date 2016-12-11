@@ -6,9 +6,10 @@ import java.util.Random;
 public class MCTS {
 	private Random random;
 	private Node rootNode;
+	
 	private double explorationConstant = Math.sqrt(2.0);
-	private double pessimisticBias;
-	private double optimisticBias;
+	private double pessimisticBias = 1.0;
+	private double optimisticBias = 1.0;
 
 	private boolean scoreBounds;
 	private boolean trackTime; // display thinking time used
@@ -76,40 +77,50 @@ public class MCTS {
 		}
 	}
 	
-	/*
+	/**
 	 *  
 	 */
 	private BoardNodePair treePolicy(Board b, Node node) {
-		while(!b.gameOver()) {
+		while (!b.gameOver()) {
+			if (node.player >= 0) { // this is a regular node
 				if (node.unvisitedChildren == null) {
-					node.expandNode(b); 
+					node.expandNode(b);
 				}
-				
+
 				if (!node.unvisitedChildren.isEmpty()) {
 					Node temp = node.unvisitedChildren.remove(random.nextInt(node.unvisitedChildren.size()));
 					node.children.add(temp);
 					b.makeMove(temp.move);
 					return new BoardNodePair(b, temp);
 				} else {
-					ArrayList<Node> bestNodes = findChildren(node, b, optimisticBias, pessimisticBias, explorationConstant);
-					
-					if (bestNodes.size() == 0){
+					ArrayList<Node> bestNodes = findChildren(node, b, optimisticBias, pessimisticBias,
+							explorationConstant);
+
+					if (bestNodes.size() == 0) {
 						// We have failed to find a single child to visit
 						// from a non-terminal node, so we conclude that
-						// all children must have been pruned, and that 
+						// all children must have been pruned, and that
 						// therefore there is no reason to continue.
-						return new BoardNodePair(b, node);						
+						return new BoardNodePair(b, node);
 					}
-					
+
 					Node finalNode = bestNodes.get(random.nextInt(bestNodes.size()));
 					node = finalNode;
 					b.makeMove(finalNode.move);
 				}
+			} else { // this is a random node
+				
+				
+				
+				
+				
+				
+				
+			}
 		}
-		
+
 		return new BoardNodePair(b, node);
-	}
-	
+	}	
 	
 	/**
 	 * This is the final step of the algorithm, to pick the best move to

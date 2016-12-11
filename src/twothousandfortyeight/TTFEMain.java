@@ -14,6 +14,7 @@ public class TTFEMain {
 		Move move;
 		Random random = new Random();
 		
+		// Start the game with two random pieces placed
 		b.currentPlayer = -1;
 		move = b.makeRandomChoice(random);
 		b.makeMove(move);
