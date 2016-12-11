@@ -24,7 +24,7 @@ public class TTFEMain {
 		
 		while (!b.gameOver()){
 			if (b.currentPlayer == 0) {
-				move = mcts.runMCTS(b, 10000, false);
+				move = mcts.runMCTS(b, 60000, false);
 				b.makeMove(move);
 				System.out.println("---");
 				for (int y = 0; y < 4; y++) {

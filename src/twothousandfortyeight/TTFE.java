@@ -14,8 +14,6 @@ public class TTFE implements Board {
 	int scoremax;
 	int turns;
 	
-	final static int TARGET = 8;
-	
 	public TTFE(int s) {
 		size = s;
 		turns = 0;
@@ -216,13 +214,8 @@ public class TTFE implements Board {
 		
 	@Override
 	public boolean gameOver() {
-		int freeSlots = 0;
 		for (int x = 0; x < size; x++){
 			for (int y = 0; y < size; y++){
-				if (board[x][y] == 0) {
-					freeSlots++;
-				}
-				
 				// Update max score
 				if (board[x][y] > scoremax){
 					scoremax = board[x][y];
@@ -230,7 +223,7 @@ public class TTFE implements Board {
 			}		
 		}
 
-		return scoremax == TARGET || (!movesLeftVertically() && !movesLeftHorizontally());
+		return (!movesLeftVertically() && !movesLeftHorizontally());
 	}
 
 	@Override
@@ -246,14 +239,13 @@ public class TTFE implements Board {
 	@Override
 	public double[] getScore() {
 		double []score = new double[1];
-		if (scoremax == TARGET)
+		/*if (scoremax == TARGET)
 			score[0] = 1;
 		else{
 			score[0] = 0;
-			if (gameOver()){
-				score[0] = 1;
-			}
-		}
+		} */
+		
+		score[0] = scoremax / 10.0d;
 		
 		return score;
 	}
