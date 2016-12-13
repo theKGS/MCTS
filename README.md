@@ -55,6 +55,27 @@ The rules also propagate the bounds for the opponents. The
 upper and lower bound for an opponent is always the lowest
 upper and lower bounds for any node respectively.
 
+## Multi-threading by Root Parallelisation
+Enable this by calling the enableRootParallelisation() method of 
+the MCTS instance. When this is enabled it is absolutely 
+vital that any class you create implementing the Move 
+interface implements a correct hashCode() and equals() method.
+
+More options will be available for controlling multithreading
+in the future.
+
 ## Stochastic Games
-Support for randomness is pending. It will likely be part
-of the next major update.
+The new version of the algorithm implements support for
+stochastic games. The algorithm treats any random behavior
+as its own node and each child node is a potential random
+event. Moves from a stochastic node are always randomly
+selected.
+
+The algorithm detects that the current state is random
+by examining the player ID of the getCurrentPlayer()
+method in the Board interface. When that function returns
+-1 it means that the current state is a random state.
+
+MCTS proceeds to selection a child node at random using
+the weight vector from getMoveWeights(). Random events 
+are not yet compatible with score bounds, but will be.
