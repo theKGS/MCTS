@@ -2,11 +2,16 @@ package main;
 
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.FutureTask;
 
 public class MCTS {
 	private Random random;
-	private Node rootNode;
-	
+	private boolean rootParallelisation;
+
 	private double explorationConstant = Math.sqrt(2.0);
 	private double pessimisticBias = 1.0;
 	private double optimisticBias = 1.0;
@@ -16,7 +21,7 @@ public class MCTS {
 	private FinalSelectionPolicy finalSelectionPolicy = FinalSelectionPolicy.robustChild;
 
 	private HeuristicFunction heuristic;
-	
+
 	public MCTS() {
 		random = new Random();
 	}
@@ -24,19 +29,54 @@ public class MCTS {
 	/**
 	 * Run a UCT-MCTS simulation for a number of iterations.
 	 * 
-	 * @param startingBoard starting board
-	 * @param runs how many iterations to think
-	 * @param bounds enable or disable score bounds.
+	 * @param startingBoard
+	 *            starting board
+	 * @param runs
+	 *            how many iterations to think
+	 * @param bounds
+	 *            enable or disable score bounds.
 	 * @return
 	 */
 	public Move runMCTS(Board startingBoard, int runs, boolean bounds) {
 		scoreBounds = bounds;
-		rootNode = new Node(startingBoard);
+		Node rootNode = new Node(startingBoard);
+		boolean pmode = rootParallelisation;
 
 		long startTime = System.nanoTime();
 
-		for (int i = 0; i < runs; i++) {
-			select(startingBoard.duplicate(), rootNode);
+		if (!pmode) {
+			for (int i = 0; i < runs; i++) {
+				select(startingBoard.duplicate(), rootNode);
+			}
+		} else {
+			ExecutorService threadpool = Executors.newFixedThreadPool(3);
+
+			ArrayList<FutureTask<Node>> futures = new ArrayList<FutureTask<Node>>();
+			futures.add((FutureTask<Node>) threadpool.submit(new MCTSTask(this, startingBoard, runs)));
+			futures.add((FutureTask<Node>) threadpool.submit(new MCTSTask(this, startingBoard, runs)));
+			futures.add((FutureTask<Node>) threadpool.submit(new MCTSTask(this, startingBoard, runs)));
+			futures.add((FutureTask<Node>) threadpool.submit(new MCTSTask(this, startingBoard, runs)));
+			
+			try {
+
+				while (!checkDone(futures)) {
+					Thread.sleep(10);
+				}
+
+				ArrayList<Node> rootNodes = new ArrayList<Node>();
+				
+				for (FutureTask<Node> f : futures){
+					rootNodes.add(f.get());
+				}
+				
+				rootNode = new Node(rootNodes);
+				
+			} catch (InterruptedException | ExecutionException e) {
+				e.printStackTrace();
+			}
+			
+			threadpool.shutdown();
+
 		}
 
 		long endTime = System.nanoTime();
@@ -48,7 +88,7 @@ public class MCTS {
 
 		return finalMoveSelection(rootNode);
 	}
-	
+
 	/**
 	 * This represents the select stage, or default policy, of the algorithm.
 	 * Traverse down to the bottom of the tree using the selection strategy
@@ -58,17 +98,17 @@ public class MCTS {
 	 * @param node
 	 *            Node from which to start selection
 	 * @param brd
-	 * 			  Board state to work from.
+	 *            Board state to work from.
 	 */
-	private void select(Board currentBoard, Node currentNode){
+	private void select(Board currentBoard, Node currentNode) {
 		// Begin tree policy. Traverse down the tree and expand. Return
 		// the new node or the deepest node it could reach. Return too
 		// a board matching the returned node.
 		BoardNodePair data = treePolicy(currentBoard, currentNode);
-		
+
 		// Run a random playout until the end of the game.
 		double[] score = playout(data.getNode(), data.getBoard());
-		
+
 		// Backpropagate results of playout.
 		Node n = data.getNode();
 		n.backPropagateScore(score);
@@ -76,7 +116,7 @@ public class MCTS {
 			n.backPropagateBounds(score);
 		}
 	}
-	
+
 	/**
 	 *  
 	 */
@@ -109,27 +149,27 @@ public class MCTS {
 					b.makeMove(finalNode.move);
 				}
 			} else { // this is a random node
-				
+
 				// Random nodes are special. We must guarantee that
 				// every random node has a fully populated list of
 				// child nodes and that the list of unvisited children
 				// is empty. We start by checking if we have been to
 				// this node before. If we haven't, we must initialise
 				// all of this node's children properly.
-				
+
 				if (node.unvisitedChildren == null) {
 					node.expandNode(b);
-					
-					for (Node n : node.unvisitedChildren){
+
+					for (Node n : node.unvisitedChildren) {
 						node.children.add(n);
 					}
 					node.unvisitedChildren.clear();
 				}
-				
+
 				// The tree policy for random nodes is different. We
 				// ignore selection heuristics and pick one node at
 				// random based on the weight vector.
-				
+
 				Node selectedNode = node.children.get(node.randomSelect(b));
 				node = selectedNode;
 				b.makeMove(selectedNode.move);
@@ -137,8 +177,8 @@ public class MCTS {
 		}
 
 		return new BoardNodePair(b, node);
-	}	
-	
+	}
+
 	/**
 	 * This is the final step of the algorithm, to pick the best move to
 	 * actually make.
@@ -149,7 +189,7 @@ public class MCTS {
 	 */
 	private Move finalMoveSelection(Node n) {
 		Node r = null;
-		
+
 		switch (finalSelectionPolicy) {
 		case maxChild:
 			r = maxChild(n);
@@ -167,18 +207,19 @@ public class MCTS {
 
 	/**
 	 * Select the most visited child node
+	 * 
 	 * @param n
 	 * @return
 	 */
-	private Node robustChild(Node n){
+	private Node robustChild(Node n) {
 		double bestValue = Double.NEGATIVE_INFINITY;
 		double tempBest;
 		ArrayList<Node> bestNodes = new ArrayList<Node>();
 
 		for (Node s : n.children) {
 			tempBest = s.games;
-			//tempBest += s.opti[n.player] * optimisticBias;
-			//tempBest += s.pess[n.player] * pessimisticBias;
+			// tempBest += s.opti[n.player] * optimisticBias;
+			// tempBest += s.pess[n.player] * pessimisticBias;
 			if (tempBest > bestValue) {
 				bestNodes.clear();
 				bestNodes.add(s);
@@ -192,13 +233,14 @@ public class MCTS {
 
 		return finalNode;
 	}
-	
+
 	/**
 	 * Select the child node with the highest score
+	 * 
 	 * @param n
 	 * @return
 	 */
-	private Node maxChild(Node n){
+	private Node maxChild(Node n) {
 		double bestValue = Double.NEGATIVE_INFINITY;
 		double tempBest;
 		ArrayList<Node> bestNodes = new ArrayList<Node>();
@@ -218,9 +260,7 @@ public class MCTS {
 
 		return finalNode;
 	}
-	
-	
-	
+
 	/**
 	 * Playout function for MCTS
 	 * 
@@ -255,53 +295,51 @@ public class MCTS {
 	}
 
 	private Move getRandomMove(Board board, ArrayList<Move> moves) {
-		double []weights = board.getMoveWeights();
-		
+		double[] weights = board.getMoveWeights();
+
 		double totalWeight = 0.0d;
-		for (int i = 0; i < weights.length; i++)
-		{
-		    totalWeight += weights[i];
+		for (int i = 0; i < weights.length; i++) {
+			totalWeight += weights[i];
 		}
-		
+
 		int randomIndex = -1;
 		double random = Math.random() * totalWeight;
-		for (int i = 0; i < weights.length; ++i)
-		{
-		    random -= weights[i];
-		    if (random <= 0.0d)
-		    {
-		        randomIndex = i;
-		        break;
-		    }
+		for (int i = 0; i < weights.length; ++i) {
+			random -= weights[i];
+			if (random <= 0.0d) {
+				randomIndex = i;
+				break;
+			}
 		}
-		
+
 		return moves.get(randomIndex);
 	}
-	
+
 	/**
-	 * Produce a list of viable nodes to visit. The actual 
-	 * selection is done in runMCTS
+	 * Produce a list of viable nodes to visit. The actual selection is done in
+	 * runMCTS
+	 * 
 	 * @param optimisticBias
 	 * @param pessimisticBias
 	 * @param explorationConstant
 	 * @return
 	 */
-	public ArrayList<Node> findChildren(Node n, Board b, double optimisticBias, double pessimisticBias, double explorationConstant){
+	public ArrayList<Node> findChildren(Node n, Board b, double optimisticBias, double pessimisticBias,
+			double explorationConstant) {
 		double bestValue = Double.NEGATIVE_INFINITY;
 		ArrayList<Node> bestNodes = new ArrayList<Node>();
 		for (Node s : n.children) {
-			// Pruned is only ever true if a branch has been pruned 
-			// from the tree and that can only happen if bounds 
+			// Pruned is only ever true if a branch has been pruned
+			// from the tree and that can only happen if bounds
 			// propagation mode is enabled.
 			if (s.pruned == false) {
-				double tempBest = s.upperConfidenceBound(explorationConstant)
-						+optimisticBias * s.opti[n.player]
-						+pessimisticBias * s.pess[n.player];
+				double tempBest = s.upperConfidenceBound(explorationConstant) + optimisticBias * s.opti[n.player]
+						+ pessimisticBias * s.pess[n.player];
 
-				if (heuristic != null){
+				if (heuristic != null) {
 					tempBest += heuristic.h(b);
 				}
-				
+
 				if (tempBest > bestValue) {
 					// If we found a better node
 					bestNodes.clear();
@@ -313,10 +351,10 @@ public class MCTS {
 				}
 			}
 		}
-		
+
 		return bestNodes;
-	}	
-	
+	}
+
 	/**
 	 * Sets the exploration constant for the algorithm. You will need to find
 	 * the optimal value through testing. This can have a big impact on
@@ -328,17 +366,18 @@ public class MCTS {
 		explorationConstant = exp;
 	}
 
-	public void setMoveSelectionPolicy(FinalSelectionPolicy policy){
+	public void setMoveSelectionPolicy(FinalSelectionPolicy policy) {
 		finalSelectionPolicy = policy;
 	}
-	
-	public void setHeuristicFunction(HeuristicFunction h){
+
+	public void setHeuristicFunction(HeuristicFunction h) {
 		heuristic = h;
 	}
-	
+
 	/**
-	 * This is multiplied by the pessimistic bounds of any
-	 * considered move during selection.	 
+	 * This is multiplied by the pessimistic bounds of any considered move
+	 * during selection.
+	 * 
 	 * @param b
 	 */
 	public void setPessimisticBias(double b) {
@@ -346,8 +385,9 @@ public class MCTS {
 	}
 
 	/**
-	 * This is multiplied by the optimistic bounds of any
-	 * considered move during selection.
+	 * This is multiplied by the optimistic bounds of any considered move during
+	 * selection.
+	 * 
 	 * @param b
 	 */
 	public void setOptimisticBias(double b) {
@@ -357,4 +397,44 @@ public class MCTS {
 	public void setTimeDisplay(boolean displayTime) {
 		this.trackTime = displayTime;
 	}
+
+	public void enableRootParallelisation() {
+		rootParallelisation = true;
+	}
+
+	// Check if all threads are done
+	private boolean checkDone(ArrayList<FutureTask<Node>> tasks){
+		for (FutureTask<Node> task : tasks){
+			if (!task.isDone()){
+				return false;
+			}
+		}
+		
+		return true;
+	}
+	
+	private class MCTSTask implements Callable<Node> {
+		private MCTS module;
+		private int iterations;
+		private Board board;
+
+		public MCTSTask(MCTS mcts, Board board, int iterations) {
+			this.module = mcts;
+			this.iterations = iterations;
+			this.board = board;
+		}
+
+		@Override
+		public Node call() throws Exception {
+			Node root = new Node(board);
+			
+			for (int i = 0; i < iterations; i++) {
+				select(board.duplicate(), root);
+			}
+			
+			return root;
+		}
+
+	}
+
 }

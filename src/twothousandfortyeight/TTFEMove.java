@@ -17,4 +17,22 @@ public class TTFEMove implements Move {
 	public TTFEMove(Direction d) {
 		dir = d;
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) return false;
+		TTFEMove mv = (TTFEMove)obj;
+		
+		if (this.dir != mv.dir) return false;
+
+		return true;
+	}
+	
+	@Override
+	public int hashCode() {
+		int m = 3;
+		m *= 21 + dir.hashCode();
+		return m;
+	}
+
 }

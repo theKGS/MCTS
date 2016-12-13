@@ -116,7 +116,7 @@ public class TTFE implements Board {
 			for (int r = 0; r < size - 1; r++) {
 				if (board[i][r] == board[i][r + 1] && board[i][r] > 0){
 					board[i][r]++;
-					score += 2 << board[i][r];  
+					score += 1 << board[i][r];  
 					board[i][r + 1] = 0;
 					r++;
 				}
@@ -126,7 +126,7 @@ public class TTFE implements Board {
 				if (board[i][r] == board[i][r - 1] && board[i][r] > 0){
 					board[i][r] = 0;
 					board[i][r - 1]++;
-					score += 2 << board[i][r - 1];  
+					score += 1 << board[i][r - 1];  
 
 					r--;
 				}
@@ -135,7 +135,7 @@ public class TTFE implements Board {
 			for (int r = size - 1; r > 0; r--) {
 				if (board[r][i] == board[r - 1][i] && board[r][i] > 0){
 					board[r][i]++;
-					score += 2 << board[r][i];  
+					score += 1 << board[r][i];  
 
 					board[r - 1][i] = 0;
 					r--;
@@ -145,7 +145,7 @@ public class TTFE implements Board {
 			for (int r = 0; r < size - 1; r++) {
 				if (board[r][i] == board[r + 1][i] && board[r][i] > 0){
 					board[r][i]++;
-					score += 2 << board[r][i];  
+					score += 1 << board[r][i];  
 					board[r + 1][i] = 0;
 					r++;
 				}
@@ -232,7 +232,7 @@ public class TTFE implements Board {
 			}		
 		}
 
-		return maxtile == 11 || (!movesLeftVertically() && !movesLeftHorizontally());
+		return (!movesLeftVertically() && !movesLeftHorizontally());
 	}
 
 	@Override

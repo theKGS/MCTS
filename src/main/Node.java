@@ -1,6 +1,7 @@
 package main;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Set;
 
 public class Node {
@@ -9,12 +10,42 @@ public class Node {
 	public Move move;
 	public ArrayList<Node> unvisitedChildren;
 	public ArrayList<Node> children;
-	public Set<Integer> rVisited;
 	public Node parent;
 	public int player;
 	public double[] pess;
 	public double[] opti;
 	public boolean pruned;
+
+	public Node(ArrayList<Node> rootNodes) {
+		HashMap<Node, ArrayList<Node>> map = new HashMap<Node, ArrayList<Node>>();
+
+		for (Node n : rootNodes) {
+			for (Node child : n.children) {
+				if (map.containsKey(child)) {
+					map.get(child).add(child);
+				} else {
+					ArrayList<Node> nlist = new ArrayList<Node>();
+					nlist.add(child);
+					map.put(child, nlist);
+				}
+			}
+		}
+	
+		children = new ArrayList<Node>();
+		for (Node n : map.keySet()){
+			children.add(new Node(map.get(n), false));
+		}
+	}	
+	
+	private Node(ArrayList<Node> nodes, boolean d){
+		move = nodes.get(0).move;
+		score = new double[nodes.get(0).score.length];
+		for (Node n : nodes){
+			games += n.games;
+			for (int i = 0; i < score.length; i++)
+				score[i] += n.score[i];
+		}
+	}
 	
 	/**
 	 * This creates the root node
@@ -62,12 +93,12 @@ public class Node {
 	 * @return
 	 */
 	public double upperConfidenceBound(double c) {
-		return score[parent.player] / games  + c
-				* Math.sqrt(Math.log(parent.games + 1) / games);
+		return score[parent.player] / games + c * Math.sqrt(Math.log(parent.games + 1) / games);
 	}
 
 	/**
 	 * Update the tree with the new score.
+	 * 
 	 * @param scr
 	 */
 	public void backPropagateScore(double[] scr) {
@@ -80,11 +111,11 @@ public class Node {
 	}
 
 	/**
-	 * Expand this node by populating its list of
-	 * unvisited child nodes.
+	 * Expand this node by populating its list of unvisited child nodes.
+	 * 
 	 * @param currentBoard
 	 */
-	public void expandNode(Board currentBoard){
+	public void expandNode(Board currentBoard) {
 		ArrayList<Move> legalMoves = currentBoard.getMoves(CallLocation.treePolicy);
 		unvisitedChildren = new ArrayList<Node>();
 		for (int i = 0; i < legalMoves.size(); i++) {
@@ -94,9 +125,9 @@ public class Node {
 	}
 
 	/**
-	 * Set the bounds in the given node and propagate the values 
-	 * back up the tree. When bounds are first created they are
-	 * both equivalent to a player's score.
+	 * Set the bounds in the given node and propagate the values back up the
+	 * tree. When bounds are first created they are both equivalent to a
+	 * player's score.
 	 * 
 	 * @param optimistic
 	 * @param pessimistic
@@ -169,30 +200,39 @@ public class Node {
 
 	/**
 	 * Select a child node at random and return it.
+	 * 
 	 * @param board
 	 * @return
 	 */
 	public int randomSelect(Board board) {
-		double []weights = board.getMoveWeights();
-		
+		double[] weights = board.getMoveWeights();
+
 		double totalWeight = 0.0d;
-		for (int i = 0; i < weights.length; i++)
-		{
-		    totalWeight += weights[i];
+		for (int i = 0; i < weights.length; i++) {
+			totalWeight += weights[i];
 		}
-		
+
 		int randomIndex = -1;
 		double random = Math.random() * totalWeight;
-		for (int i = 0; i < weights.length; ++i)
-		{
-		    random -= weights[i];
-		    if (random <= 0.0d)
-		    {
-		        randomIndex = i;
-		        break;
-		    }
+		for (int i = 0; i < weights.length; ++i) {
+			random -= weights[i];
+			if (random <= 0.0d) {
+				randomIndex = i;
+				break;
+			}
 		}
-		
+
 		return randomIndex;
+	}
+
+	@Override
+	public int hashCode() {
+		return move.hashCode();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		Node n = (Node) obj;
+		return move.equals(n.move);
 	}
 }
