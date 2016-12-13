@@ -5,8 +5,7 @@ Java implementation of UCT based MCTS.
 Everything in the main package is related to the algorithm 
 itself. The other packages (connectFour, twothousandfortyeight) 
 are implementations of games which the algorithm can play. 
-Use them for reference. As of now 2048 is broken, but 
-Connect Four works fine.
+Use them for reference. 
 
 MCTS specifies the method runMCTS which implements the 
 full algorithm with UCT default policy. After thinking for
@@ -55,6 +54,11 @@ The rules also propagate the bounds for the opponents. The
 upper and lower bound for an opponent is always the lowest
 upper and lower bounds for any node respectively.
 
+Stochastic nodes are not yet implemented for score bounds,
+but when that is done they will propagate, for each player,
+the highest upper bound among all child nodes and the lowest 
+lower bound among all child nodes for that player.
+
 ## Multi-threading by Root Parallelisation
 Enable this by calling the enableRootParallelisation() method of 
 the MCTS instance. When this is enabled it is absolutely 
@@ -62,7 +66,9 @@ vital that any class you create implementing the Move
 interface implements a correct hashCode() and equals() method.
 
 More options will be available for controlling multithreading
-in the future.
+in the future. It is very likely that the way it works
+internally will also change. As such, the hashCode and equals
+requirements might change to the Comparable interface instead.
 
 ## Stochastic Games
 The new version of the algorithm implements support for
