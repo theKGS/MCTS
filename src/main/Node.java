@@ -2,7 +2,6 @@ package main;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Set;
 
 public class Node {
 	public double[] score;

@@ -52,10 +52,10 @@ public class MCTS {
 			ExecutorService threadpool = Executors.newFixedThreadPool(3);
 
 			ArrayList<FutureTask<Node>> futures = new ArrayList<FutureTask<Node>>();
-			futures.add((FutureTask<Node>) threadpool.submit(new MCTSTask(this, startingBoard, runs)));
-			futures.add((FutureTask<Node>) threadpool.submit(new MCTSTask(this, startingBoard, runs)));
-			futures.add((FutureTask<Node>) threadpool.submit(new MCTSTask(this, startingBoard, runs)));
-			futures.add((FutureTask<Node>) threadpool.submit(new MCTSTask(this, startingBoard, runs)));
+			futures.add((FutureTask<Node>) threadpool.submit(new MCTSTask(startingBoard, runs)));
+			futures.add((FutureTask<Node>) threadpool.submit(new MCTSTask(startingBoard, runs)));
+			futures.add((FutureTask<Node>) threadpool.submit(new MCTSTask(startingBoard, runs)));
+			futures.add((FutureTask<Node>) threadpool.submit(new MCTSTask(startingBoard, runs)));
 			
 			try {
 
@@ -414,12 +414,10 @@ public class MCTS {
 	}
 	
 	private class MCTSTask implements Callable<Node> {
-		private MCTS module;
 		private int iterations;
 		private Board board;
 
-		public MCTSTask(MCTS mcts, Board board, int iterations) {
-			this.module = mcts;
+		public MCTSTask(Board board, int iterations) {
 			this.iterations = iterations;
 			this.board = board;
 		}
