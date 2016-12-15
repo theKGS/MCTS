@@ -233,5 +233,5 @@ public class Node {
 	public boolean equals(Object obj) {
 		Node n = (Node) obj;
 		return move.equals(n.move);
-	}
+	}	
 }

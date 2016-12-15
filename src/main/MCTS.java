@@ -21,7 +21,12 @@ public class MCTS {
 	private FinalSelectionPolicy finalSelectionPolicy = FinalSelectionPolicy.robustChild;
 
 	private HeuristicFunction heuristic;
+	
+	private int threads;
+	private ExecutorService threadpool;
+	private ArrayList<FutureTask<Node>> futures;
 
+	
 	public MCTS() {
 		random = new Random();
 	}
@@ -49,34 +54,30 @@ public class MCTS {
 				select(startingBoard.duplicate(), rootNode);
 			}
 		} else {
-			ExecutorService threadpool = Executors.newFixedThreadPool(3);
 
-			ArrayList<FutureTask<Node>> futures = new ArrayList<FutureTask<Node>>();
-			futures.add((FutureTask<Node>) threadpool.submit(new MCTSTask(startingBoard, runs)));
-			futures.add((FutureTask<Node>) threadpool.submit(new MCTSTask(startingBoard, runs)));
-			futures.add((FutureTask<Node>) threadpool.submit(new MCTSTask(startingBoard, runs)));
-			futures.add((FutureTask<Node>) threadpool.submit(new MCTSTask(startingBoard, runs)));
-			
+			for (int i = 0; i < threads; i++)
+				futures.add((FutureTask<Node>) threadpool.submit(new MCTSTask(startingBoard, runs)));
+						
 			try {
 
-				while (!checkDone(futures)) {
+				while (!checkDone(futures))
 					Thread.sleep(10);
-				}
 
 				ArrayList<Node> rootNodes = new ArrayList<Node>();
-				
-				for (FutureTask<Node> f : futures){
+
+				// Collect all computed root nodes
+				for (FutureTask<Node> f : futures)
 					rootNodes.add(f.get());
-				}
-				
+
+				// Invoke the merge constructor
 				rootNode = new Node(rootNodes);
-				
+
 			} catch (InterruptedException | ExecutionException e) {
 				e.printStackTrace();
 			}
-			
-			threadpool.shutdown();
 
+			futures.clear();
+			//threadpool.shutdown();
 		}
 
 		long endTime = System.nanoTime();
@@ -398,21 +399,27 @@ public class MCTS {
 		this.trackTime = displayTime;
 	}
 
-	public void enableRootParallelisation() {
+	public void enableRootParallelisation(int threads) {
 		rootParallelisation = true;
+		this.threads = threads;
+		
+		threadpool = Executors.newFixedThreadPool(threads);
+		futures = new ArrayList<FutureTask<Node>>();
+
+		
 	}
 
 	// Check if all threads are done
-	private boolean checkDone(ArrayList<FutureTask<Node>> tasks){
-		for (FutureTask<Node> task : tasks){
-			if (!task.isDone()){
+	private boolean checkDone(ArrayList<FutureTask<Node>> tasks) {
+		for (FutureTask<Node> task : tasks) {
+			if (!task.isDone()) {
 				return false;
 			}
 		}
-		
+
 		return true;
 	}
-	
+
 	private class MCTSTask implements Callable<Node> {
 		private int iterations;
 		private Board board;
@@ -425,11 +432,11 @@ public class MCTS {
 		@Override
 		public Node call() throws Exception {
 			Node root = new Node(board);
-			
+
 			for (int i = 0; i < iterations; i++) {
 				select(board.duplicate(), root);
 			}
-			
+
 			return root;
 		}
 
