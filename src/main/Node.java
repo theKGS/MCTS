@@ -3,6 +3,8 @@ package main;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import testgame1.TestGame1Move;
+
 public class Node {
 	public double[] score;
 	public double games;
@@ -172,9 +174,9 @@ public class Node {
 		if (!unvisitedChildren.isEmpty()) {
 			for (int i = 0; i < opti.length; i++) {
 				if (i == player) {
-					opti[i] = 1;
+					opti[i] = Integer.MAX_VALUE;
 				} else {
-					pess[i] = 0;
+					pess[i] = Integer.MIN_VALUE;
 				}
 			}
 		}
@@ -232,4 +234,13 @@ public class Node {
 		Node n = (Node) obj;
 		return move.equals(n.move);
 	}	
+	
+	public void print(){
+		String s = (move != null) ? Integer.toString(((TestGame1Move)move).tstate) : " ";
+		System.out.print("{N(" + player + " " + s + ") ");
+		for (Node n: children){
+			n.print();
+		}
+		System.out.print(" }");
+	}
 }

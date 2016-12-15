@@ -8,6 +8,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
 
+import testgame1.TestGame1Move;
+
 public class MCTS {
 	private Random random;
 	private boolean rootParallelisation;
@@ -77,7 +79,6 @@ public class MCTS {
 			}
 
 			futures.clear();
-			//threadpool.shutdown();
 		}
 
 		long endTime = System.nanoTime();
@@ -87,6 +88,8 @@ public class MCTS {
 			System.out.println("Thinking time per move in milliseconds: " + (endTime - startTime) / 1000000);
 		}
 
+		//rootNode.print();
+		
 		return finalMoveSelection(rootNode);
 	}
 
