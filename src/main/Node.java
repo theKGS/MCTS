@@ -125,8 +125,7 @@ public class Node {
 
 	/**
 	 * Set the bounds in the given node and propagate the values back up the
-	 * tree. When bounds are first created they are both equivalent to a
-	 * player's score.
+	 * tree.
 	 * 
 	 * @param optimistic
 	 * @param pessimistic
@@ -144,11 +143,11 @@ public class Node {
 	private void backPropagateBoundsHelper() {
 		for (int i = 0; i < opti.length; i++) {
 			if (i == player) {
-				opti[i] = 0;
-				pess[i] = 0;
+				opti[i] = Integer.MIN_VALUE;
+				pess[i] = Integer.MIN_VALUE;
 			} else {
-				opti[i] = 1;
-				pess[i] = 1;
+				opti[i] = Integer.MAX_VALUE;
+				pess[i] = Integer.MAX_VALUE;
 			}
 		}
 
@@ -180,7 +179,6 @@ public class Node {
 			}
 		}
 
-		// TODO: This causes redundant pruning. Fix it
 		pruneBranches();
 		if (parent != null)
 			parent.backPropagateBoundsHelper();
