@@ -15,8 +15,8 @@ public class MCTS {
 	private boolean rootParallelisation;
 
 	private double explorationConstant = Math.sqrt(2.0);
-	private double pessimisticBias = 1.0;
-	private double optimisticBias = 1.0;
+	private double pessimisticBias = 0.0;
+	private double optimisticBias = 0.0;
 
 	private boolean scoreBounds;
 	private boolean trackTime; // display thinking time used
@@ -88,8 +88,6 @@ public class MCTS {
 			System.out.println("Thinking time per move in milliseconds: " + (endTime - startTime) / 1000000);
 		}
 
-		//rootNode.print();
-		
 		return finalMoveSelection(rootNode);
 	}
 
@@ -222,8 +220,6 @@ public class MCTS {
 
 		for (Node s : n.children) {
 			tempBest = s.games;
-			// tempBest += s.opti[n.player] * optimisticBias;
-			// tempBest += s.pess[n.player] * pessimisticBias;
 			if (tempBest > bestValue) {
 				bestNodes.clear();
 				bestNodes.add(s);
@@ -251,6 +247,8 @@ public class MCTS {
 
 		for (Node s : n.children) {
 			tempBest = s.score[n.player];
+			tempBest += s.opti[n.player] * optimisticBias;
+			tempBest += s.pess[n.player] * pessimisticBias;
 			if (tempBest > bestValue) {
 				bestNodes.clear();
 				bestNodes.add(s);
