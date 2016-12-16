@@ -31,23 +31,23 @@ public class Node {
 				}
 			}
 		}
-	
+
 		children = new ArrayList<Node>();
-		for (Node n : map.keySet()){
+		for (Node n : map.keySet()) {
 			children.add(new Node(map.get(n), false));
 		}
-	}	
-	
-	private Node(ArrayList<Node> nodes, boolean d){
+	}
+
+	private Node(ArrayList<Node> nodes, boolean d) {
 		move = nodes.get(0).move;
 		score = new double[nodes.get(0).score.length];
-		for (Node n : nodes){
+		for (Node n : nodes) {
 			games += n.games;
 			for (int i = 0; i < score.length; i++)
 				score[i] += n.score[i];
 		}
 	}
-	
+
 	/**
 	 * This creates the root node
 	 * 
@@ -144,24 +144,38 @@ public class Node {
 
 	private void backPropagateBoundsHelper() {
 		for (int i = 0; i < opti.length; i++) {
-			if (i == player) {
-				opti[i] = Integer.MIN_VALUE;
-				pess[i] = Integer.MIN_VALUE;
+			if (player != -1) {
+				if (i == player) {
+					opti[i] = Integer.MIN_VALUE;
+					pess[i] = Integer.MIN_VALUE;
+				} else {
+					opti[i] = Integer.MAX_VALUE;
+					pess[i] = Integer.MAX_VALUE;
+				}
 			} else {
-				opti[i] = Integer.MAX_VALUE;
+				// This is a random/environment node
+				opti[i] = Integer.MIN_VALUE;
 				pess[i] = Integer.MAX_VALUE;
 			}
 		}
 
 		for (int i = 0; i < opti.length; i++) {
 			for (Node c : children) {
-				if (i == player) {
-					if (opti[i] < c.opti[i])
-						opti[i] = c.opti[i];
-					if (pess[i] < c.pess[i])
-						pess[i] = c.pess[i];
+				if (player != -1) {
+					if (i == player) {
+						if (opti[i] < c.opti[i])
+							opti[i] = c.opti[i];
+						if (pess[i] < c.pess[i])
+							pess[i] = c.pess[i];
+					} else {
+						if (opti[i] > c.opti[i])
+							opti[i] = c.opti[i];
+						if (pess[i] > c.pess[i])
+							pess[i] = c.pess[i];
+					}
 				} else {
-					if (opti[i] > c.opti[i])
+					// This is a random/environment node
+					if (opti[i] < c.opti[i])
 						opti[i] = c.opti[i];
 					if (pess[i] > c.pess[i])
 						pess[i] = c.pess[i];
@@ -174,9 +188,9 @@ public class Node {
 		if (!unvisitedChildren.isEmpty()) {
 			for (int i = 0; i < opti.length; i++) {
 				if (i == player) {
-					opti[i] = Integer.MAX_VALUE;
+					opti[i] = 1;
 				} else {
-					pess[i] = Integer.MIN_VALUE;
+					pess[i] = 0;
 				}
 			}
 		}
@@ -192,9 +206,6 @@ public class Node {
 				s.pruned = true;
 			}
 		}
-
-		if (parent != null)
-			parent.pruneBranches();
 	}
 
 	/**
@@ -233,12 +244,12 @@ public class Node {
 	public boolean equals(Object obj) {
 		Node n = (Node) obj;
 		return move.equals(n.move);
-	}	
-	
-	public void print(){
-		String s = (move != null) ? Integer.toString(((TestGame1Move)move).tstate) : " ";
+	}
+
+	public void print() {
+		String s = (move != null) ? Integer.toString(((TestGame1Move) move).tstate) : " ";
 		System.out.print("{N(" + player + " " + s + ") ");
-		for (Node n: children){
+		for (Node n : children) {
 			n.print();
 		}
 		System.out.print(" }");
