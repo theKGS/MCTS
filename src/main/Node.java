@@ -42,7 +42,7 @@ public class Node implements Comparable<Node>{
 			Node curnode = childnodes.get(0);
 			childnodes.remove(0);
 			
-			while(childnodes.get(0).compareTo(curnode) == 0){
+			while(!childnodes.isEmpty() && childnodes.get(0).compareTo(curnode) == 0){
 				tnodes.add(childnodes.get(0));
 				childnodes.remove(0);
 			}

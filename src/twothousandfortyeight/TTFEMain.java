@@ -16,7 +16,7 @@ public class TTFEMain {
 		//runGame(100, 1.4d, 500, false, "2048-100games-500i-1.4c.txt");
 		//runGame(100, 1.4d, 500, false, "2048-100games-500i-0.5c.txt");
 		//runGame(4, 1.4d, 500, false, "2048-10games-500i-0.5c.txt");
-		runGame(10, 0.3d, 4200, true, "2048-100games.txt", "300games-2000i-0.3c ");
+		runGame(1, 0.3d, 8000, true, "2048-100games.txt", "300games-2000i-0.3c ");
 		//runGame(100, 0.4d, 2000, false, "2048-100games.txt", "300games-2000i-0.4c ");
 		//runGame(100, 0.5d, 2000, false, "2048-100games.txt", "300games-2000i-0.5c ");
 		//runGame(100, 1.0d, 2000, false, "2048-100games.txt", "300games-2000i-1.0c ");
@@ -27,7 +27,7 @@ public class TTFEMain {
 	static void runGame(int games, double constant, int iterations, boolean print, String filename, String lprefix) {
 		MCTS mcts = new MCTS();
 		mcts.setExplorationConstant(constant);
-		//mcts.enableRootParallelisation(4);
+		mcts.enableRootParallelisation(4);
 		mcts.setTimeDisplay(true);
 		Move move;
 		Random random = new Random();
