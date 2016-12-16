@@ -70,6 +70,9 @@ in the future. It is very likely that the way it works
 internally will also change. As such, the hashCode and equals
 requirements might change to the Comparable interface instead.
 
+Use the input parameter to the enableRootParallelisation
+function to control the quantity of threads available to the algorithm.
+
 ## Stochastic Games
 The new version of the algorithm implements support for
 stochastic games. The algorithm treats any random behavior
@@ -85,3 +88,14 @@ method in the Board interface. When that function returns
 MCTS proceeds to selection a child node at random using
 the weight vector from getMoveWeights(). Random events 
 are not yet compatible with score bounds, but will be.
+
+If that was too confusing, think of any action with a random effect
+as an action that brings the game into an "environment" state, where
+the environment is allowed to make its own move, and that move is
+entirely at random.
+
+## Multiple Observer Information Set MCTS
+This is an upcoming feature that might possibly be
+made into its own object. MO-ISMCTS is an approach to
+dealing with information that is hidden to some or all
+players.
