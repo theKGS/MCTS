@@ -406,8 +406,6 @@ public class MCTS {
 		
 		threadpool = Executors.newFixedThreadPool(threads);
 		futures = new ArrayList<FutureTask<Node>>();
-
-		
 	}
 
 	// Check if all threads are done
@@ -421,6 +419,9 @@ public class MCTS {
 		return true;
 	}
 
+	/*
+	 * This is a task for the threadpool.
+	 */
 	private class MCTSTask implements Callable<Node> {
 		private int iterations;
 		private Board board;

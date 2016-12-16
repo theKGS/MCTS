@@ -21,4 +21,10 @@ public class ConnectFourMove implements Move {
 		strb.append(row);
 		return strb.toString();
 	}
+
+	@Override
+	public int compareTo(Move o) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }

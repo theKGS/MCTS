@@ -18,21 +18,18 @@ public class TTFEMove implements Move {
 		dir = d;
 	}
 
+	/**
+	 * This is necessary for the multi-threading. Note
+	 * that the method need only compare the information
+	 * in the move that relates to choices made by the
+	 * AI player. Any information in the move that
+	 * pertains to random choices etc. etc. can be
+	 * freely ignored.
+	 */
 	@Override
-	public boolean equals(Object obj) {
-		if (obj == null) return false;
-		TTFEMove mv = (TTFEMove)obj;
-		
-		if (this.dir != mv.dir) return false;
-
-		return true;
-	}
-	
-	@Override
-	public int hashCode() {
-		int m = 3;
-		m *= 21 + dir.hashCode();
-		return m;
+	public int compareTo(Move o) {
+		TTFEMove mv = (TTFEMove) o;
+		return dir.compareTo(mv.dir);
 	}
 
 }

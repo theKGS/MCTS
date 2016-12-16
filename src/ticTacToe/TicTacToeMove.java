@@ -10,4 +10,10 @@ public class TicTacToeMove implements Move {
 		this.x = x;
 		this.y = y;
 	}
+
+	@Override
+	public int compareTo(Move o) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }

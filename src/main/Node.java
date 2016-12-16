@@ -1,11 +1,13 @@
 package main;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
 
 import testgame1.TestGame1Move;
 
-public class Node {
+public class Node implements Comparable<Node>{
 	public double[] score;
 	public double games;
 	public Move move;
@@ -17,28 +19,40 @@ public class Node {
 	public double[] opti;
 	public boolean pruned;
 
+	/**
+	 * This is a special Node constructor that merges 
+	 * multiple root nodes into a single main node.
+	 * @param rootNodes
+	 */
 	public Node(ArrayList<Node> rootNodes) {
 		HashMap<Node, ArrayList<Node>> map = new HashMap<Node, ArrayList<Node>>();
-
+		LinkedList<Node> childnodes = new LinkedList<Node>();
+		
 		for (Node n : rootNodes) {
 			for (Node child : n.children) {
-				if (map.containsKey(child)) {
-					map.get(child).add(child);
-				} else {
-					ArrayList<Node> nlist = new ArrayList<Node>();
-					nlist.add(child);
-					map.put(child, nlist);
-				}
+				childnodes.add(child);
 			}
 		}
 
+		Collections.sort(childnodes);
 		children = new ArrayList<Node>();
-		for (Node n : map.keySet()) {
-			children.add(new Node(map.get(n), false));
+		
+		while (!childnodes.isEmpty()){
+			LinkedList<Node> tnodes = new LinkedList<Node>();
+			Node curnode = childnodes.get(0);
+			childnodes.remove(0);
+			
+			while(childnodes.get(0).compareTo(curnode) == 0){
+				tnodes.add(childnodes.get(0));
+				childnodes.remove(0);
+			}
+			
+			children.add(new Node(tnodes));
 		}
+		
 	}
 
-	private Node(ArrayList<Node> nodes, boolean d) {
+	private Node(LinkedList<Node> nodes) {
 		move = nodes.get(0).move;
 		score = new double[nodes.get(0).score.length];
 		for (Node n : nodes) {
@@ -253,5 +267,10 @@ public class Node {
 			n.print();
 		}
 		System.out.print(" }");
+	}
+
+	@Override
+	public int compareTo(Node o) {
+		return move.compareTo(o.move);
 	}
 }

@@ -1,4 +1,4 @@
 package main;
 
-public interface Move{
+public interface Move extends Comparable<Move>{
 }
