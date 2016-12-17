@@ -1,4 +1,6 @@
-package main;
+package main.support;
+
+import main.Board;
 
 /**
  * Create a class implementing this interface and instantiate
