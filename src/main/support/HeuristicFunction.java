@@ -7,7 +7,7 @@ import main.Board;
  * it. Pass the instance to the MCTS instance using the
  * {@link #setHeuristicFunction(HeuristicFunction h) setHeuristicFunction} method.
 
- * @author Ganryu
+ * @author KGS
  *
  */
 public interface HeuristicFunction {

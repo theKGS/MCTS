@@ -9,6 +9,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
 
 import main.support.HeuristicFunction;
+import main.support.PlayoutSelection;
 import testgame1.TestGame1Move;
 
 public class MCTS {
@@ -24,12 +25,12 @@ public class MCTS {
 	private FinalSelectionPolicy finalSelectionPolicy = FinalSelectionPolicy.robustChild;
 
 	private HeuristicFunction heuristic;
-	
+	private PlayoutSelection playoutpolicy;
+
 	private int threads;
 	private ExecutorService threadpool;
 	private ArrayList<FutureTask<Node>> futures;
 
-	
 	public MCTS() {
 		random = new Random();
 	}
@@ -60,7 +61,7 @@ public class MCTS {
 
 			for (int i = 0; i < threads; i++)
 				futures.add((FutureTask<Node>) threadpool.submit(new MCTSTask(startingBoard, runs)));
-						
+
 			try {
 
 				while (!checkDone(futures))
@@ -277,21 +278,25 @@ public class MCTS {
 
 		// Start playing random moves until the game is over
 		while (!brd.gameOver()) {
-			moves = brd.getMoves(CallLocation.treePolicy);
-			if (brd.getCurrentPlayer() >= 0) {
-				// make random selection normally
-				mv = moves.get(random.nextInt(moves.size()));
+			if (playoutpolicy == null) {
+				moves = brd.getMoves(CallLocation.treePolicy);
+				if (brd.getCurrentPlayer() >= 0) {
+					// make random selection normally
+					mv = moves.get(random.nextInt(moves.size()));
+				} else {
+
+					// This situation only occurs when a move
+					// is entirely random, for example a die
+					// roll. We must consider the random weights
+					// of the moves.
+
+					mv = getRandomMove(brd, moves);
+				}
+
+				brd.makeMove(mv);
 			} else {
-
-				// This situation only occurs when a move
-				// is entirely random, for example a die
-				// roll. We must consider the random weights
-				// of the moves.
-
-				mv = getRandomMove(brd, moves);
+				playoutpolicy.Process(board);
 			}
-
-			brd.makeMove(mv);
 		}
 
 		return brd.getScore();
@@ -377,6 +382,10 @@ public class MCTS {
 		heuristic = h;
 	}
 
+	public void setPlayoutSelection(PlayoutSelection p) {
+		playoutpolicy = p;
+	}
+
 	/**
 	 * This is multiplied by the pessimistic bounds of any considered move
 	 * during selection.
@@ -404,7 +413,7 @@ public class MCTS {
 	public void enableRootParallelisation(int threads) {
 		rootParallelisation = true;
 		this.threads = threads;
-		
+
 		threadpool = Executors.newFixedThreadPool(threads);
 		futures = new ArrayList<FutureTask<Node>>();
 	}
