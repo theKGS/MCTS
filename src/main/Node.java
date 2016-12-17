@@ -25,7 +25,6 @@ public class Node implements Comparable<Node>{
 	 * @param rootNodes
 	 */
 	public Node(ArrayList<Node> rootNodes) {
-		HashMap<Node, ArrayList<Node>> map = new HashMap<Node, ArrayList<Node>>();
 		LinkedList<Node> childnodes = new LinkedList<Node>();
 		
 		for (Node n : rootNodes) {
@@ -52,6 +51,12 @@ public class Node implements Comparable<Node>{
 		
 	}
 
+	/**
+	 * This is a Node constructor that constructs a
+	 * new node by combining the stats for all nodes
+	 * passed into it.
+	 * @param nodes
+	 */
 	private Node(LinkedList<Node> nodes) {
 		move = nodes.get(0).move;
 		score = new double[nodes.get(0).score.length];
