@@ -254,17 +254,6 @@ public class Node implements Comparable<Node>{
 		return randomIndex;
 	}
 
-	@Override
-	public int hashCode() {
-		return move.hashCode();
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		Node n = (Node) obj;
-		return move.equals(n.move);
-	}
-
 	public void print() {
 		String s = (move != null) ? Integer.toString(((TestGame1Move) move).tstate) : " ";
 		System.out.print("{N(" + player + " " + s + ") ");
