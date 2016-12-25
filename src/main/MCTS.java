@@ -92,6 +92,10 @@ public class MCTS {
 		return finalMoveSelection(rootNode);
 	}
 
+	Move runMCTS(Determinisable startingBoard, int runs) {
+		return null;
+	}
+	
 	/**
 	 * This represents the select stage, or default policy, of the algorithm.
 	 * Traverse down to the bottom of the tree using the selection strategy
