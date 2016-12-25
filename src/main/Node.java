@@ -5,8 +5,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 
-import testgame1.TestGame1Move;
-
 public class Node implements Comparable<Node>{
 	public double[] score;
 	public double games;
@@ -252,15 +250,6 @@ public class Node implements Comparable<Node>{
 		}
 
 		return randomIndex;
-	}
-
-	public void print() {
-		String s = (move != null) ? Integer.toString(((TestGame1Move) move).tstate) : " ";
-		System.out.print("{N(" + player + " " + s + ") ");
-		for (Node n : children) {
-			n.print();
-		}
-		System.out.print(" }");
 	}
 
 	@Override

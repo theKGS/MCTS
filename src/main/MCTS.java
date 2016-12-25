@@ -10,7 +10,6 @@ import java.util.concurrent.FutureTask;
 
 import main.support.HeuristicFunction;
 import main.support.PlayoutSelection;
-import testgame1.TestGame1Move;
 
 public class MCTS {
 	private Random random;
