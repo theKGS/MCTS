@@ -64,5 +64,24 @@ public class CardStack {
 		bundles.clear();
 		bundles.add(n);
 	}
+	
+	/**
+	 * Draw a card. Get a reference to the top card
+	 * @return
+	 */
+	public Card draw(){
+		CardBlock n = bundles.get(0);
+		n.size--;
+		if (n.size == 0)
+			bundles.remove(0);
+		
+		Card c = n.cards.get(0);  
+		n.cards.remove(0);		
+		return c;
+	}
+	
+	public LinkedList<Card> peek(int n){
+		return null;
+	}
 
 }
