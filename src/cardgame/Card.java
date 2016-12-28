@@ -11,6 +11,11 @@ public class Card {
 		effects = new LinkedList<Effect>();
 	}
 	
+	public Card(Card c) {
+		data = c.data;
+		// TODO: Incomplete
+	}
+
 	public int getHealth(){
 		return 0;
 	}
