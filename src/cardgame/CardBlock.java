@@ -5,13 +5,13 @@ import java.util.Collections;
 
 public class CardBlock {
 	public ArrayList<Card> cards;
-	public boolean canBeDeterminised;
+	public boolean israndom;
 	public int size;
 	
 	public CardBlock(boolean det){
 		cards = new ArrayList<Card>();
 		size = 0;
-		canBeDeterminised = det;
+		israndom = det;
 	}
 	
 	/**
@@ -19,7 +19,7 @@ public class CardBlock {
 	 * @param m
 	 */
 	public CardBlock(CardBlock m) {
-		canBeDeterminised = m.canBeDeterminised;
+		israndom = m.israndom;
 		size = m.size;
 		cards = new ArrayList<Card>();
 		
@@ -28,6 +28,10 @@ public class CardBlock {
 		}
 	}
 
+	public void insert(Card c){
+		cards.add(c);		
+	}
+	
 	public void shuffle() {
 		Collections.shuffle(cards);
 	}

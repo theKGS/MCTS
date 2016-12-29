@@ -8,6 +8,14 @@ import main.Move;
 
 public class CardGame implements Board {
 
+	public Player human;
+	public Player computer;
+	private final CardDictionary dictionary;
+	
+	public CardGame(final CardDictionary dictionary){
+		this.dictionary = dictionary;
+	}
+	
 	@Override
 	public Board duplicate() {
 		// TODO Auto-generated method stub
