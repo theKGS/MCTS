@@ -1,8 +1,9 @@
 # Monte Carlo Tree Search
-Java implementation of UCT based MCTS.
+Java implementation of UCT based MCTS and soon more variants of
+MCTS including MT-ISMCTS.
 
 ## Main Algorithm
-Everything in the main package is related to the algorithm 
+Everything in the main package is related to MCTS implementation
 itself. The other packages (connectFour, twothousandfortyeight) 
 are implementations of games which the algorithm can play. 
 Use them for reference. 
@@ -61,24 +62,19 @@ lower bound among all child nodes for that player.
 
 ## Multi-threading by Root Parallelisation
 Enable this by calling the enableRootParallelisation() method of 
-the MCTS instance. When this is enabled it is absolutely 
-vital that any class you create implementing the Move 
-interface implements a correct hashCode() and equals() method.
-
-More options will be available for controlling multithreading
-in the future. It is very likely that the way it works
-internally will also change. As such, the hashCode and equals
-requirements might change to the Comparable interface instead.
+the MCTS instance.
 
 Use the input parameter to the enableRootParallelisation
-function to control the quantity of threads available to the algorithm.
+function to control the quantity of threads available to the 
+algorithm. More options will be available for controlling 
+multithreading in the future.
 
 ## Stochastic Games
 The new version of the algorithm implements support for
-stochastic games. The algorithm treats any random behavior
-as its own node and each child node is a potential random
-event. Moves from a stochastic node are always randomly
-selected.
+stochastic games. The algorithm behaves as if any
+random choice is actually an action taken by a player
+who plays his moves entirely at random. The term
+"environment" player is used in some games.
 
 The algorithm detects that the current state is random
 by examining the player ID of the getCurrentPlayer()
@@ -88,14 +84,3 @@ method in the Board interface. When that function returns
 MCTS proceeds to selection a child node at random using
 the weight vector from getMoveWeights(). Random events 
 are not yet compatible with score bounds, but will be.
-
-If that was too confusing, think of any action with a random effect
-as an action that brings the game into an "environment" state, where
-the environment is allowed to make its own move, and that move is
-entirely at random.
-
-## Multiple Observer Information Set MCTS
-This is an upcoming feature that might possibly be
-made into its own object. MO-ISMCTS is an approach to
-dealing with information that is hidden to some or all
-players.

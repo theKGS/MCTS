@@ -6,6 +6,18 @@ import main.Board;
 import main.CallLocation;
 import main.Move;
 
+/**
+ * This is a card game for testing the AI heavily influenced
+ * by Hearthstone. It features no graphics and the rules are
+ * quite different.
+ * 
+ * Two players take turns acting.
+ * 
+ * Draw, Begin, Action, Combat, Action, End
+ * 
+ * @author Ganryu
+ *
+ */
 public class CardGame implements Board {
 
 	public Player human;
@@ -14,6 +26,8 @@ public class CardGame implements Board {
 	
 	public CardGame(final CardDictionary dictionary){
 		this.dictionary = dictionary;
+		human = new Player();
+		computer = new Player();
 	}
 	
 	@Override
