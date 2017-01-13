@@ -2,6 +2,22 @@
 Java implementation of UCT based MCTS and soon more variants of
 MCTS including MT-ISMCTS.
 
+## Game Implementations
+
+### TicTacToe
+It's exactly what you would expect it to be.
+
+### ConnectFour
+It's like TicTacToe but slightly more interesting. The AI behaves
+strange given a very high computational budget. I'm looking into it.
+
+### 2048
+This was implemented for testing games with stochastic elements.
+
+### Card Game
+This is going to be scrapped or replaced. Shouldn't really be
+in the repository right now. Ignore it.
+
 ## Main Algorithm
 Everything in the main package is related to MCTS implementation
 itself. The other packages (connectFour, twothousandfortyeight) 
