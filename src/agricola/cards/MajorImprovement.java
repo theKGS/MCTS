@@ -1,5 +1,5 @@
 package agricola.cards;
 
-public interface MajorImprovement {
+public interface MajorImprovement extends HasCost {
 
 }
