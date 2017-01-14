@@ -11,7 +11,7 @@ public class LandGrid {
 	private int roomcount;
 
 	private int[][] cowcount = new int[5][3];
-	private int[][] pigcount = new int[5][3];
+	private int[][] boarcount = new int[5][3];
 	private int[][] sheepcount = new int[5][3];
 
 	private RL roomLevel = RL.Wood;
@@ -36,7 +36,7 @@ public class LandGrid {
 				field[x][y] = other.field[x][y];
 
 				cowcount[x][y] = other.cowcount[x][y];
-				pigcount[x][y] = other.pigcount[x][y];
+				boarcount[x][y] = other.boarcount[x][y];
 				sheepcount[x][y] = other.sheepcount[x][y];
 			}
 		}

@@ -7,19 +7,29 @@ import main.CallLocation;
 import main.Move;
 
 public class ABoard implements Board {
-	private LandGrid[] landgrid = new LandGrid[3];
+	private Player[] players = new Player[3];
+	private ArrayList<ActionSpace> actionspaces;
 	int startingplayer = 0;
+	int currentplayer;
 	
 	public ABoard(){
-		landgrid[0] = new LandGrid();
-		landgrid[1] = new LandGrid();
-		landgrid[2] = new LandGrid();
+		actionspaces = new ArrayList<ActionSpace>();
+		
+		currentplayer = 0;
+		players[0] = new Player();
+		players[1] = new Player();
+		players[2] = new Player();
 	}
 	
 	public ABoard(ABoard other) {
-		landgrid[0] = other.landgrid[0].duplicate();
-		landgrid[1] = other.landgrid[1].duplicate();
-		landgrid[2] = other.landgrid[2].duplicate();
+		actionspaces = new ArrayList<ActionSpace>();
+		for (ActionSpace a : other.actionspaces){
+			actionspaces.add(0, a.duplicate());
+		}
+		
+		players[0] = other.players[0].duplicate();
+		players[1] = other.players[1].duplicate();
+		players[2] = other.players[2].duplicate();
 		startingplayer = other.startingplayer;
 	}
 
@@ -36,7 +46,11 @@ public class ABoard implements Board {
 
 	@Override
 	public void makeMove(Move m) {
-		// TODO Auto-generated method stub
+		if (currentplayer == -1){
+			
+		} else {
+			
+		}
 		
 	}
 
@@ -77,10 +91,10 @@ public class ABoard implements Board {
 
 	public void printLandGrid() {
 		System.out.println("Player 0");
-		landgrid[0].printBoard();
+		players[0].printBoard();
 		System.out.println("Player 1");
-		landgrid[1].printBoard();
+		players[1].printBoard();
 		System.out.println("Player 2");
-		landgrid[2].printBoard();
+		players[2].printBoard();
 	}
 }
