@@ -1,4 +1,4 @@
-package cardgame;
+package agricola;
 
 import java.util.ArrayList;
 

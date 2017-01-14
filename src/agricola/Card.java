@@ -1,4 +1,4 @@
-package cardgame;
+package agricola;
 
 public interface Card {
 
