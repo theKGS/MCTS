@@ -8,6 +8,7 @@ import main.Move;
 
 public class CardGame implements Board {
 	private LandGrid[] landgrid = new LandGrid[3];
+	int startingplayer = 0;
 	
 	public CardGame(){
 	}
