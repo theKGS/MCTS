@@ -3,9 +3,9 @@ package cardgame;
 import java.util.HashMap;
 
 public class CardDictionary {
-	HashMap<String, ACard> cards;
+	HashMap<String, Card> cards;
 	
 	public CardDictionary(){
-		cards = new HashMap<String, ACard>();
+		cards = new HashMap<String, Card>();
 	}
 }
