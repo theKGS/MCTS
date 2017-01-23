@@ -22,7 +22,7 @@ public class TTTMain {
 		for (int i = 0; i < 100; i ++) {
 			TicTacToe ttt = new TicTacToe();
 			while (!ttt.gameOver()){
-				move = mcts.runMCTS(ttt, 120000, false);
+				move = mcts.runMCTS_UCT(ttt, 120000, false);
 				ttt.makeMove(move);
 			}
 			

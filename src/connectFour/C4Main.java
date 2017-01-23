@@ -42,7 +42,7 @@ public class C4Main {
 				//cf.print();
 
 				if (gameInstance.currentPlayer != activePlayerID || !playerControl) {
-					Move m = player.runMCTS(gameInstance, it, bounds);
+					Move m = player.runMCTS_UCT(gameInstance, it, bounds);
 					gameInstance.makeMove(m);
 				} else {
 					System.out.println("Enter a row: ");

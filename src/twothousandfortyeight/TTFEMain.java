@@ -58,7 +58,7 @@ public class TTFEMain {
 			while (!b.gameOver()) {
 				roundcount++;
 				if (b.currentPlayer == 0) {
-					move = mcts.runMCTS(b, iterations, false);
+					move = mcts.runMCTS_UCT(b, iterations, false);
 					b.makeMove(move);
 
 					if (print) {

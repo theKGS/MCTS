@@ -45,7 +45,7 @@ public class MCTS {
 	 *            enable or disable score bounds.
 	 * @return
 	 */
-	public Move runMCTS(Board startingBoard, int runs, boolean bounds) {
+	public Move runMCTS_UCT(Board startingBoard, int runs, boolean bounds) {
 		scoreBounds = bounds;
 		Node rootNode = new Node(startingBoard);
 		boolean pmode = rootParallelisation;
