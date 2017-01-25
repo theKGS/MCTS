@@ -1,6 +1,8 @@
 package main;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Random;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
@@ -49,7 +51,8 @@ public class MCTS {
 		scoreBounds = bounds;
 		Node rootNode = new Node(startingBoard);
 		boolean pmode = rootParallelisation;
-
+		Move bestMoveFound = null;
+		
 		long startTime = System.nanoTime();
 
 		if (!pmode) {
@@ -72,9 +75,15 @@ public class MCTS {
 				for (FutureTask<Node> f : futures)
 					rootNodes.add(f.get());
 
-				// Invoke the merge constructor
-				rootNode = new Node(rootNodes);
-
+				ArrayList<Move> moves = new ArrayList<Move>();
+								
+				for (Node n : rootNodes){
+					Node c = robustChild(n); // Select robust child
+					moves.add(c.move);
+				}
+				
+				bestMoveFound = vote(moves);
+								
 			} catch (InterruptedException | ExecutionException e) {
 				e.printStackTrace();
 			}
@@ -89,11 +98,40 @@ public class MCTS {
 			System.out.println("Thinking time per move in milliseconds: " + (endTime - startTime) / 1000000);
 		}
 
-		return finalMoveSelection(rootNode);
+		return bestMoveFound;
 	}
 
-	Move runMCTS(Determinisable startingBoard, int runs) {
-		return null;
+	private Move vote(ArrayList<Move> moves){
+		Collections.sort(moves);
+		ArrayList<Integer> counts = new ArrayList<Integer>();
+		ArrayList<Move> cmoves = new ArrayList<Move>();
+		
+		Move omove = moves.get(0);
+		int count = 0;
+		for (Move m : moves){
+			if (omove.compareTo(m) == 0){
+				count ++;
+			} else {
+				cmoves.add(omove);
+				counts.add(count);
+				omove = m;
+				count = 1;
+			}
+		}
+		
+		int mostvotes = 0;
+		ArrayList<Move> mostVotedMove = new ArrayList<Move>();
+		for (int i = 0; i < counts.size(); i++){
+			if (mostvotes < counts.get(i)){
+				mostvotes = counts.get(i);
+				mostVotedMove.clear();
+				mostVotedMove.add(cmoves.get(i));
+			} else if (mostvotes == counts.get(i)) {
+				mostVotedMove.add(cmoves.get(i));
+			}
+		}
+
+		return mostVotedMove.get(random.nextInt(mostVotedMove.size()));
 	}
 	
 	/**
@@ -413,6 +451,12 @@ public class MCTS {
 		this.trackTime = displayTime;
 	}
 
+	/**
+	 * Switch on multi threading. The argument indicates
+	 * how many threads you want in the thread pool.
+	 * 
+	 * @param threads
+	 */
 	public void enableRootParallelisation(int threads) {
 		rootParallelisation = true;
 		this.threads = threads;
