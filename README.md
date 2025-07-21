@@ -90,13 +90,15 @@ The new version of the algorithm implements support for
 stochastic games. The algorithm behaves as if any
 random choice is actually an action taken by a player
 who plays his moves entirely at random. The term
-"environment" player is used in some games.
+"environment" player is used in some articles.
 
 The algorithm detects that the current state is random
 by examining the player ID of the getCurrentPlayer()
 method in the Board interface. When that function returns
--1 it means that the current state is a random state.
+-1 it means that the current state is controlled by
+the environment player.
 
-MCTS proceeds to selection a child node at random using
+MCTS proceeds to select a child node at random using
 the weight vector from getMoveWeights(). Random events 
-are not yet compatible with score bounds, but will be.
+are not yet compatible with score bounds, but will be
+in the future.
